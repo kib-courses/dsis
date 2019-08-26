@@ -6,6 +6,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyphenat}
 \usepackage[russian,english]{babel}          % Use metropolis theme
+\usepackage{wrapfig}
 
 \setbeamertemplate{footline}[frame number] % указывает на каждой странице общее количество страниц
 
@@ -49,7 +50,7 @@
   	\auditorium{А в чем физический смысл?}
   \end{frame}
   
-  \begin{frame}{Пример}
+  \begin{frame}{Пример}\label{frame:class_feature_vector_example}
   \begin{itemize}
   	 \item $x_1$ -- сумма транзакции [в рублях]
   	 \item $x_2$ -- возраст клиента [в годах]
@@ -57,7 +58,7 @@
   	 \item $x_4$ -- MCC код\footnote{\termdef{Merchant Category Code} -- номер деятельности компании при осуществлении безналичной оплаты. Например \textbf{1731} означает оплату за электроэнергию, \textbf{3137} -- покупка авиабилетов, \textbf{4121} -- такси}
   	 \item  $y=1$ -- операция мошенническая (фродовая);  $y=0$ -- легитимная.
   \end{itemize}
-  \begin{center}\small \begin{tabular}{ l l }\label{tabular:class_feature_vector_example}
+  \begin{center}\small \begin{tabular}{ l l }
   	$0 \mapsto (3234, 25, 1, 1731) $ &  $0 \mapsto (2540, 55, 0, 1731)$ \\
   	$1 \mapsto (18400, 45, 0, 3137)$ & $0 \mapsto (2540, 55, 0, 1731)$  \\
   	$1 \mapsto (903, 19, 0, 4121)$  & $0 \mapsto (1875, 45, 0, 4121)$  \\
@@ -69,7 +70,7 @@
   
   \begin{frame}
    \begin{block}{Замечание}
-	  В отличие от таблицы, представленной на слайде №\ref{tabular:class_feature_vector_example},
+	  В отличие от таблицы, представленной на слайде №\ref{frame:class_feature_vector_example},
 	  в данных на реальных задачах \term{вектор признаков} может состоять из $~200$ и более признаков:
 	  $\bold x = (x_1, x_2, ..., x_{200}, ...)$
   \end{block}
@@ -110,6 +111,28 @@
   	\end{equation}
   \end{frame}
 
+	\begin{frame}
+	Как правило множество $U_{fit}$ задается парой:
+	\begin{equation}
+		U_{fit} := (\bold X, \bold y) 
+	\end{equation}
+	где $\bold X$ и $\bold y$ -- это \textbf{упорядоченные} совокупности (списки)
+	из \term{векторов признаков} $\bold  x$ и соответствующих им \term{классов} $y$. 
+	
+	См.например:
+	\url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html\#sklearn.ensemble.RandomForestClassifier.fit}
+	\end{frame}
+
+
+	  
+	\begin{frame}{Классификация}
+	Функция $fit$ (cм. \eqref{eq:fit_def} на слайде №\ref{frame:classification_def}) возвращает функцию $score$, которая размечает каждую точку пространства признаков на величину от 0 до 1. Чем ближе эта величина к 1, тем <<более вероятно>> что это класс 1, чем ближе к 0 -- тем более вероятно что класс 0.
+	\begin{center}
+		\includegraphics[width=8cm]{../pic/classification_example.png}\centering
+	\end{center}
+\end{frame}
+
+
  \begin{frame}
 	 \begin{block}{Замечание}
 	 	$U_{fit}$ в общем случае это именно неупорядоченная совокупность, а не множество. Во множестве ни один элемент не может быть представлен более одного раза, а в неупорядоченной совокумности -- может. Для простоты в дальнейшем 	$U_{fit}$ будем называть множеством.
@@ -125,15 +148,97 @@
 	\end{block}
    \end{frame}
   
-  
-  \begin{frame}{Классификация}
-  	Функция $fit$ (cм. \eqref{eq:fit_def} на слайде №\ref{frame:classification_def}) -- размечает каждую точку пространства признаков на величину от 0 до 1. Чем ближе эта величина к 1, тем <<более вероятно>> что это класс 1, чем ближе к 0 -- тем более вероятно что класс 0.
-    \begin{center}
-    	\includegraphics[width=8cm]{pic/classification_example.png}\centering
-    \end{center}
+	\begin{frame}
+	Без использования алгоритмов машинного обучения, функцию $score$ необходимо разрабатывать 
+	<<вручную>>. Пример слайда №\ref{frame:class_feature_vector_example}:
+	\begin{center}\small \begin{tabular}{ l l }
+			$0 \mapsto (3234, 25, 1, 1731) $ &  $0 \mapsto (2540, 55, 0, 1731)$ \\
+			$1 \mapsto (18400, 45, 0, 3137)$ & $0 \mapsto (2540, 55, 0, 1731)$  \\
+			$1 \mapsto (903, 19, 0, 4121)$  & $0 \mapsto (1875, 45, 0, 4121)$  \\
+			$0 \mapsto (854, 21, 1, 4121)$  & $1 \mapsto (702, 21, 0, 4121)$  \\
+			$1 \mapsto (903, 19, 0, 4121)$  & $0 \mapsto (1875, 45, 0, 4121)$  \\
+			$0 \mapsto (28400, 41, 1, 3137)$ & $0 \mapsto (25040, 55, 0, 1731)$  \\
+	\end{tabular}\end{center}
 	
-  \end{frame}
+	Можно задать функцию $score$ следующим способом:
+	\begin{equation}\label{eq:score_example}
+		score := \left\{ 
+			\begin{array}
+			[c]{ll}%
+			0, ~$если$~ x_3 = 1 \vee x_4 = 1731
+			\\
+			0.6667, ~$если$~ x_3 = 0  \wedge x_4 \neq 1731
+			\end{array}
+		\right.
+	\end{equation}
 
+	\end{frame}
+
+	\begin{frame}{Переобучение (Переподгонка, Overfitting)}
+	\termdef{Переобучение} -- эффект построенной модели (функция $score$), 
+	при котором на тестовой выборке модель работает существенно хуже.
+	\begin{wrapfigure}{l}{0.4\textwidth}
+	\includegraphics[width=4cm]{../pic/overfitting_example.png}\centering
+	% \caption{Пример переобучения и нормального обучения}
+	\end{wrapfigure}	
+	Это связано с тем, что при построении модели («в процессе обучения») в обучающей выборке обнаруживаются некоторые случайные закономерности, которые отсутствуют в генеральной совокупности.
+	\end{frame}
+   	
+   	\begin{frame}{Пример переобучения}
+   	В примере \eqref{eq:score_example} у нас никогда не бывает мошенничества если клиент является 
+   	мужчиной ($x_3=1$):
+   	 \begin{equation*}
+   	score := \left\{ 
+   	\begin{array}
+   	[c]{ll}%
+   	0, ~$если$~ x_3 = 1 \vee x_4 = 1731
+   	\\
+   	0.6667, ~$если$~ x_3 = 0  \wedge x_4 \neq 1731
+   	\end{array}
+   	\right.
+   	\end{equation*}
+   	Однако это абсурд! Просто у нас такая выборка:
+   \begin{center}\small \begin{tabular}{ l l }
+   		$0 \mapsto (3234, 25, 1, 1731) $ &  $0 \mapsto (2540, 55, 0, 1731)$ \\
+   		$1 \mapsto (18400, 45, 0, 3137)$ & $0 \mapsto (2540, 55, 0, 1731)$  \\
+   		$1 \mapsto (903, 19, 0, 4121)$  & $0 \mapsto (1875, 45, 0, 4121)$  \\
+   		$0 \mapsto (854, 21, 1, 4121)$  & $1 \mapsto (702, 21, 0, 4121)$  \\
+   		$1 \mapsto (903, 19, 0, 4121)$  & $0 \mapsto (1875, 45, 0, 4121)$  \\
+   		$0 \mapsto (28400, 41, 1, 3137)$ & $0 \mapsto (25040, 55, 0, 1731)$  \\
+   \end{tabular}\end{center}
+	\end{frame}
+   
+   \begin{frame}{Обучение с подкреплением, reinforcement learning (Дообучение, Refitting)}
+  	Есть первоначальная обучающая выборка: 
+   \begin{equation*}
+    U_{fit} = \left\{ y \mapsto \bold x  \right\}
+   \end{equation*}
+ 	Первоначальное обучение:
+  \begin{equation*}
+  score_1 := fit (U_{fit}) 
+  \end{equation*} 
+  	В дальнейшем при получении нового множества $\hat U_{fit}$ (возможно состоящее из одного элемента)
+  	мы дообучаем систему:
+  	\begin{equation}
+  	score_{i+1} := refit (\hat U_{fit}, score_{i}) 
+  	\end{equation} 
+   	Таким образом функция $score_i$ заменяется на новую функцию $score_{i+1}$.
+   \end{frame}
+
+
+	\begin{frame}{Тестовая выборка}
+	После того как мы задали функцию оценщика ($score$)
+	необходимо как-то оценить качество этой функции.
+	
+	Для этого мы выбираем другую выборку $U_{test}$ и для каждого $\bold x \in U_{test}$ 
+	находим $\hat y$. 
+	
+	Таким образом можно задать совокупность пар:
+	\begin{equation}
+	\{(y, \hat y)\} := \left\{ (y, \hat y)~~\forall (\bold x, y) \in U_{test} : \hat y := score(\bold x) \right\} 
+	\end{equation}
+	
+	\end{frame}
    
    \section{Вопросы для самопроверки}
 
@@ -151,8 +256,8 @@
    \end{enumerate}
 	\end{frame}
 
-   \begin{frame}{Обучающая выборка со слайда №\ref{tabular:class_feature_vector_example}}
- 	Посмотрите на \term{выборку} со слайда №\ref{tabular:class_feature_vector_example}. 
+   \begin{frame}{Обучающая выборка со слайда №\ref{frame:class_feature_vector_example}}
+ 	Посмотрите на \term{выборку} со слайда №\ref{frame:class_feature_vector_example}. 
  	\begin{enumerate}
  	\item Верно ли утверждение, что если совершается оплата электроэнергии, то данная операция всегда легитимная?
  	\item Есть ли корреляция между возрастом клиента и мошенничеством при покупке авиабилетов? 
@@ -160,6 +265,12 @@
  	\item Покупает ли молодёжь авиабилеты через данный банк? 
  	\item Если совершают мошенничество в сфере автоперевозок, то обманывают мужчин или женщин?
 	\end{enumerate}
+	\end{frame}
+  
+  	\begin{frame}
+  		\begin{enumerate}
+  			\item Что такое обучение (fitting)? Что такое переобучение? (overfitting)?
+  		\end{enumerate} 
 	\end{frame}
   
 
