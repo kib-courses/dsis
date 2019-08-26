@@ -35,6 +35,7 @@
     \begin{enumerate}
 	\item \nameref{section:classification_defs}
 	\item \nameref{section:precision_recall_defs}
+	\item \nameref{section:all_of_them}
 	\end{enumerate}
  \end{frame}
     
@@ -325,8 +326,47 @@
 	\end{frame}
 
 	
-	
 
+   \section{Кластеризация, регрессия, идентификация, прогнозирование}\label{section:all_of_them}	
+
+   \begin{frame}{Кластеризация}
+   \termdef{Кластеризация} -- разбиение совокупности неразмеченных на классы выборки $U = {\bold x}$ на заданное (или произвольное) количество классов. 
+   
+   Имейте в виду, что нет соглашений о том, возвращает ли кластеризация функцию определения кластера $cluster$:
+  \begin{equation}
+  cluster := fit(U) 
+  \end{equation}
+  \begin{equation}
+  y := cluster(\bold x) 
+  \end{equation}
+   
+   или же сами метки $y$ для каждого $\bold x$:
+   \begin{equation}
+   \{ y, \bold x \} := fit(U) 
+   \end{equation}
+   \end{frame}
+
+	\begin{frame}{Кластеризация}
+	Пример:
+	\begin{center}
+	\includegraphics[width=8cm]{../pic/clustering_example_1.png}
+	\end{center}
+	\end{frame}
+   
+   \begin{frame}{Кластеризация}
+   Если данные разряжены и/или их мало (например всего 100 точек), то кластеризация работает плохо:
+   \begin{center}
+   	\includegraphics[width=8cm]{../pic/clustering_example_2.png}
+   \end{center}
+	\end{frame}
+
+   \begin{frame}{Кластеризация}
+   Не всегда кластеры несут какой-либо смысл.
+	\begin{center}
+		\includegraphics[width=8cm]{../pic/clustering_example_3.png}
+	\end{center}
+	\end{frame}
+   
    
    \section{Вопросы для самопроверки}
 
@@ -377,6 +417,17 @@
   		Как тогда изменятся формулы \eqref{eq:recall_by_counts} и \eqref{eq:presicionl_by_counts}?
   		
   	\end{frame}
+  
+  	\begin{frame}{Задачи машинного обучения}
+	\begin{enumerate}
+		\item Чем классификация отличается от идентификации? Можно ли идентификацию назвать классификацией с большим количеством классов?
+		\item Что такое кластеризация? Может ли кластеризация быть одним из предварительных действий для классификации? 
+		\item Что такое регрессия, интерполяция и аппроксимация? В чем отличие?
+		\item Что такое прогнозирование? Если прогнозируемая величина дискретна и ограничена, можно ли задачу прогнозирования свести к задачи классификации?
+		\item задачу классификации, кластеризации или прогнозирования решает обученная нейронная сеть?	
+	\end{enumerate}  	  	
+	
+	\end{frame}
   
 
 \end{document}
