@@ -34,7 +34,7 @@
   \begin{frame}{План лекции}
     \begin{enumerate}
 	\item \nameref{section:classification_defs}
-	\item второе
+	\item \nameref{section:precision_recall_defs}
 	\end{enumerate}
  \end{frame}
     
@@ -225,6 +225,18 @@
    	Таким образом функция $score_i$ заменяется на новую функцию $score_{i+1}$.
    \end{frame}
 
+	\section{Тестовая выборка. Отсечка. tp, tn, fp, fn. Полнота и точность.}\label{section:precision_recall_defs}
+
+	\begin{frame}
+	Итак, у нас построена $score$ каким-либо алгоритмом машинного обучения. 
+	Пока оставим за скобками как этот алгоритм построен. Это <<чёрный ящик>>.
+		
+	\begin{center}
+	\includegraphics[width=5cm]{../pic/magic_box.png}\centering
+	\end{center}
+	\end{frame}
+
+	
 
 	\begin{frame}{Тестовая выборка}
 	После того как мы задали функцию оценщика ($score$)
@@ -238,7 +250,83 @@
 	\{(y, \hat y)\} := \left\{ (y, \hat y)~~\forall (\bold x, y) \in U_{test} : \hat y := score(\bold x) \right\} 
 	\end{equation}
 	
+	После того, как мы задали какую либо отсечку ($offset$), мы каждую пару $(y, \hat y)$ можем отнести к одному из четырёх 
+	событий: \textbf{true positive (tp), true negative (tn), false positive (fp), false negative (fn)}.
+		
+	\auditorium{Вспоминаем первую лекцию. Что такое полнота и точность?}
 	\end{frame}
+
+	\begin{frame}
+	Просмотрим для определённой отсечки $offset$
+	множество ${y, \hat y}$. 
+	Если $\hat y \geqslant offset$ -- то это \textbf{positive}, 
+	если $\hat y < offset$ -- то это \textbf{negative}.
+	
+	Если $y=0$ и \textbf{negative} или $y=1$ и \textbf{positive}, то это \textbf{true} negative/positive.
+	Иначе \textbf{false}  negative/positive.
+	
+	Определим величины:
+	\begin{enumerate}
+		\item $ctp$ (count true positive) -- количество событий true positive (tp);
+		\item $cfp$ (count false positive) -- количество событий false positive (fp);
+		\item $ctn$ (count true negative) -- количество событий true positive (tn);
+		\item $cfn$ (count false negative) -- количество событий false negative (fn).
+	\end{enumerate}
+	\end{frame}
+
+	\begin{frame}{Вопрос на засыпку}
+	Верно ли, что полноту ($\Pi$) и точность ($T$) можно определить с помощью формул?:
+	\begin{equation*}
+	\Pi = \frac{ctp}{ctp + cfn}
+	\end{equation*}
+	\begin{equation*}
+	T = \frac{ctp}{ctp + cfp}
+	\end{equation*}
+	\auditorium{Мнение зала?}
+	\end{frame}
+
+	\begin{frame}{Вопрос на засыпку}
+	Верно ли, что полноту ($\Pi$) и точность ($T$) можно определить с помощью формул?:
+	\begin{equation*}
+	\Pi = \frac{ctp}{ctp + cfn}
+	\end{equation*}
+	\begin{equation*}
+	T = \frac{ctp}{ctp + cfp}
+	\end{equation*}
+	 \begin{block}{Запомните}
+		Формула для полноты -- верна, а для точности -- нет!
+	\end{block}
+	\auditorium{Почему?}
+	\end{frame}
+
+	\begin{frame}{Вопрос на засыпку}
+	Тестовая выборка $U_{test}$ является лишь подмножеством всех событий. 
+	
+	Как правило мошенничество составляет пренебрежимо малую часть всех транзакций в системе,
+	поэтому за определённый промежуток времени для $U_{test}$ выбирают все события мошенничества.
+	
+	Однако взять и проскорить все легитимные операции физически невозможно.
+	(Напрмер в Сбербанк Онлайне \textbf{ежесекундно} совершается в среднем 80 транзакций).
+	Поэтому для $U_{test}$ выбирают лишь малую долю легитимных транзакций для проверки функции
+	$score$.
+	\end{frame}
+
+	\begin{frame}{Полнота и точность}
+	Введём величину $coef_{legitim}$ -- это отношение количества легитимных транзакций во всей выборке, 
+	делённая на количество легитимных транзакций в  $U_{test}$.
+	
+	Для любой отсечки $offset$ можем вычислить \termdef{полноту} ($\Pi$, recall) и \termdef{точность} ($T$, precision):
+		\begin{equation}\label{eq:recall_by_counts}
+		\Pi = \frac{ctp}{ctp + cfn}
+		\end{equation}
+		\begin{equation}\label{eq:presicionl_by_counts}
+		T = \frac{ctp}{ctp + cfp \cdot coef_{legitim}}
+		\end{equation}
+	\end{frame}
+
+	
+	
+
    
    \section{Вопросы для самопроверки}
 
@@ -267,11 +355,28 @@
 	\end{enumerate}
 	\end{frame}
   
-  	\begin{frame}
+  	\begin{frame}{Обучение и переобучение}
   		\begin{enumerate}
   			\item Что такое обучение (fitting)? Что такое переобучение? (overfitting)?
+  			\item Почему функции $fit$ и $refit$ -- это функции высшего порядка?
+  			\item Как с помощью ансамблирования уменьшить проблему переобучения (а для некоторых алгоритмов и вовсе его убрать) ?
+  			\item можете предложить какую-либо меру измерить переобучение?
+  			\item Верно ли утверждение, что чем больше и <<разнообразней>> выборка, тем меньше ошибок, вызванных переобучением?
   		\end{enumerate} 
 	\end{frame}
+  	
+  	\begin{frame}{Полнота, точность и $coef_{fraud}$}
+  		Существуют задачи, в которых физически невозможно рассчитать скоринг для всех 
+  		мошеннических операций на определённом достаточном для анализа качества системы промежутке времени (например неделя).
+  		К примеру -- это задача распознавания спама. Спама очень много...
+  		
+  		Тогда, для расчёта ${y, \hat y}$ выбирается лишь подмножество мошеннических операций для выборки $U_test$.
+  		
+  		Таким образом, аналогично $coef_{legitim}$ разумно определить коэфициент $coef_{fraud}$.
+  		
+  		Как тогда изменятся формулы \eqref{eq:recall_by_counts} и \eqref{eq:presicionl_by_counts}?
+  		
+  	\end{frame}
   
 
 \end{document}
