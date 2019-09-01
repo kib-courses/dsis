@@ -1,0 +1,193 @@
+\documentclass{beamer}
+\usetheme{metropolis} 
+\usecolortheme{rose}
+
+\usepackage{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage{hyphenat}
+\usepackage[russian,english]{babel}          % Use metropolis theme
+\usepackage{wrapfig}
+
+\setbeamertemplate{footline}[frame number] % указывает на каждой странице общее количество страниц
+
+% Указывайте все новые термины в \termdef команде. А уже известные ранее или из других курсов в \term
+\newcommand{\termdef}[1]{\textbf{\textit{#1}}}
+\newcommand{\term}{\textit}
+% Диалог с аудиторией.
+\newcommand{\auditorium}[1]{\color{red}{\textbf{#1}}}
+% \setbeamercolor{auditorium}{fg=red}
+
+\title{Вводная лекция. Цели и задачи курса}
+% \date{\today}
+\date{3 сентября 2019 \\ 10 сентября 2019}
+\author{Павел Владимирович Слипенчук}
+\institute{Москва, МГТУ им.Бауманка,\\ каф.ИУ-8, КИБ}
+% \titlegraphic{\includegraphics[width=2cm]{logo_ur.jpg}}
+\titlegraphic{\small \href{https://github.com/kib-courses/dsis}{Data Science для решения задач информационной безопасности}}
+
+\begin{document}
+  \maketitle
+    
+   \begin{frame}{План лекции}
+   \begin{enumerate}
+   	\item \nameref{section:goals}
+   	\item \nameref{section:topics}
+   		\item \nameref{section:how_to}
+   		\item \nameref{section:quastions}
+   		\item \nameref{section:literature}
+   	\end{enumerate}
+   \end{frame}
+  
+  
+  \section{Цели. Требования на входе. Результат.}\label{section:goals}
+    
+  \begin{frame}{Цели студента}
+  	\begin{itemize}
+  		\item Основы Data Science -- это часть
+  <<джентльменского~минимума>>
+  образованного профессионала 
+  в сфере IT/ИБ 
+  		\item Понимание границ задач ИБ,
+  для которых методы машинного обучения
+  применимы и возможны
+  		\item Применение на практике знаний
+  по математике
+  		\item Опыт построения программных систем
+  		\item Рекомендация на практику/трудоустройство 
+  в сфере анализа данных / Data Science / Data Engineering
+  		\item \textbf{Нормальные} темы для НИРС / дипломов
+  	\end{itemize}
+  \end{frame}
+  
+     
+  \begin{frame}{Цели педагога}
+  	\begin{itemize}
+  		\item Рекрутинг
+  		\item Развитие речи
+  		\item Формирование <<ML \& DS культурной среды безопасников>>
+  		\item Самообразование\footnote{
+  		Всегда попадаются 2-3 умных студента, которые задают интересные и полезные для педагога и его саморазвития вопросы.}
+  	    \item снять лапшу с ушей! :)
+  		\item It is fun!
+	\end{itemize}
+  \end{frame}
+  
+  \begin{frame}{Требования на входе}
+  \begin{enumerate}
+  	\item Linux
+  	\item Студент должен иметь уверенный навык программирования
+  	(в предпочтении Python).
+  	\item Знание Python или желание быстро и самостоятельно освоить этот 
+  	язык программирования
+  	\item Знание комбинаторики, теор.вера, мат.стата, дискретной математики
+  	\item Алгоритмы и структуры данных
+  \end{enumerate}
+  \end{frame}
+
+  \section{Темы спецкурса}\label{section:topics}
+  
+  \begin{frame}
+ 	%  \newcounter{topicscounter}
+	\begin{enumerate}
+	% \setcounter{topicscounter}{1}
+	\item Экспертные системы, машинное обучение, Data Science, Data Engineering.
+	\item Проблемы ИБ решаемые экспертными системами.
+	\item Проблемы ИБ НЕ решаемые экспертными системами ;)
+	\item Джентельменский минимум по ML: гиперплоскость, регрессия, функция штрафа, полнота и точность, VaR, SSI, ROC-кривая и AUC, понятие ансамбля, бутстрепинг, бустинг, бэггинг.
+	\item Random Forest как наиболее простой и эффективный алгоритм. Его преимущества для 
+	<<задач с противником>>.
+	\end{enumerate}
+\end{frame}
+
+  \begin{frame}
+\begin{enumerate}
+	% \setcounter{topicscounter}{5}
+	\item[5] Feature Extraction в ИБ задачах
+	\item[6] UEBA
+	\item[7] RSA\footnote{Имеется в виду система фрод-мониторинга RSA, а не асимметричный алгоритм шифрования :)} 
+	\item[8] Brand Protection и Anti Piracy.
+	\item[9] Бизнес-процессы в DS
+	\item[10] Как НЕ работают нейронные сети :)
+\end{enumerate}
+\end{frame}
+
+  \section{Как попасть на спецкурс?}\label{section:how_to}
+  
+  \begin{frame}{Собеседования}
+  
+  03 и 10 сентября, во вторник, в 10:15 в НОЦ ИБ, класс 6
+  будет проведено собеседование. 
+	
+  По результатам будут отобраны ребята на спецкурс.
+
+   \begin{block}{Замечание}
+   	Собеседование -- это не экзамен. Вы такие, какие есть. 
+   	Имеет смысл освежить в памяти ряд вопросов 
+   	(см. <<\nameref{section:quastions}>>).
+   	
+   	Спецкурс читается каждый год. Не пройдёте сейчас -- 
+   	пройдёте в следующем году
+   \end{block}
+  
+  \end{frame}
+  
+  \begin{frame}{На кого рассчитан спецкурс}
+  На студентов 3-4 курсов, уже <<набившие руку>> в программировании,
+  имеющие базовые представления в алгоритмах и структур данных,
+  знающие комбинаторику, теор.вер., матстат. на инженерном уровне.
+  
+  \end{frame}
+
+  \begin{frame}{Студенты не из МГТУ им.Баумана}
+  Если вы не учитесь в МГТУ им.Баумана, вам нужен пропуск.
+  
+  Для этого напишите в телеграмм \textbf{Александре Молоденовой}: @solinenarany
+  
+  Приходите на собеседование 10 сентября. 
+  \textbf{Не опаздывайте}
+  
+  При успешно пройденном собеседовании вам выпишут его на семестр.
+  \end{frame}
+  
+  \section{Вопросы к собеседованию}\label{section:quastions}
+  
+  \section{Рекомендуемая литература}\label{section:literature}
+  
+  \begin{frame}{Python}
+  
+  Книги
+  \begin{itemize}
+  	\item Для начинающих: 
+  	\textbf{Марк Саммерфилд. Python на практике} 
+  	\item 
+  	Для продвинутых:
+  	\textbf{Лучано Рамальо. Python: к вершинам мастерства.}
+  \end{itemize}
+  
+  Пишите много кода и придумывайте интересные задачи. 
+  Например по прикладной стеганографии:
+  \begin{itemize}
+  	\item Русскоязычный чат-бот Boltoon: создаем виртуального собеседника
+  	\url{https://habr.com/ru/post/340190/}
+  	\item Хэш-стеганография с использованием vkapi
+  	\url{https://habr.com/ru/post/351370/}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Теория вероятности и математическая статистика.}
+Курс будет \textit{прикладным}, поэтому для его понимания 
+нужно хорошо знать основные определения и их смысл.
+
+Есть много хороших книг, например 
+<<Феллер В. Введение в теорию вероятностей и ее приложения>>.
+
+Если вы захотите стать профессиональным Data Scientist-ом,
+то, конечно теор.вер и мат.стат нужно будет выучить <<на зубок>>.
+
+Однако для подготовки к спецкурсу -- это излишне.
+
+Смотри вопросы из секции <<\nameref{section:quastions}>>.
+\end{frame}
+  
+\end{document}

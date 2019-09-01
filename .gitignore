@@ -1,11 +1,11 @@
 
 # Служебные файлы LaTeX и TexStudio
-**_lecture/*.aux
-**_lecture/*.log
-**_lecture/*.nav
-**_lecture/*.out
-**_lecture/*.pdf
-**_lecture/*.snm
-**_lecture/*.synctex.gz
-**_lecture/*.toc
+*/*.aux
+*/*.log
+*/*.nav
+*/*.out
+*/*.pdf
+*/*.snm
+*/*.synctex.gz
+*/*.toc
 
