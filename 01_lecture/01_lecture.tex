@@ -349,6 +349,26 @@
   \auditorium{ДЗ: найдите полноту}
   \end{frame}
   
+  \begin{frame}{$O_1$ и $O_2$ через $\Pi$ и $T$}
+  Ошибки I и II рода можно выразить через полноту и точность.
+  
+  \begin{equation}\label{eq:O_2_from_recall}
+  O_2 = 1 - \Pi
+  \end{equation}
+  
+  \begin{equation}\label{eq:O_1_from_recall_and_presicion}
+  O_1 = \frac{P(F_r)}{P(L_r)} \cdot \Pi \cdot \left( \frac{1}{T} - 1 \right)
+  \end{equation}
+  
+  \auditorium{ДЗ. Докажите формулы 
+  \eqref{eq:O_2_from_recall}
+  и
+  \eqref{eq:O_1_from_recall_and_presicion}
+  }
+  
+  \auditorium{ДЗ. Выразите полноту и точность, через $O_1$ и $O_2$}
+  \end{frame}
+  
   \begin{frame}
   \LARGE
   \centering
@@ -457,7 +477,11 @@
   \begin{frame}{А эти области никогда не используются???}
 	\includegraphics[width=11cm]{../pic/roc_example_3.png}
 
-	\end{frame}
+  \end{frame}
+
+  \begin{frame}{Ансамбли}
+  \includegraphics[width=11cm]{../pic/ensemble_example.png}
+  \end{frame}
 
   \section{Задачи ИБ, решаемые экспертными системами}\label{section:is_tasks}
 	
@@ -524,11 +548,16 @@
     \item Используя формулу Байеса, докажите формулы \eqref{eq:recall_calc} и \eqref{eq:precision_calc} из слайда №\ref{frame:presicion_recall}
     \item Найдите полноту в примере на слайде №\ref{frame:precision_calc_example}.
     
-     \item Вычислите полноту и точность через ошибки первого и второго рода
+   
+   \item Докажите формулы \eqref{eq:O_2_from_recall}
+     и
+     \eqref{eq:O_1_from_recall_and_presicion}:
+     вычисление ошибок первого и второго рода 
+     через полноту и точность
   
-   \item Вычислите ошибки первого и второго рода через полноту и точность
+   \item Вычислите полноту и точность через ошибки первого и второго рода
   
-     \item Почему специалисты Data Science используют полноту и точность, 
+   \item Почему специалисты Data Science используют полноту и точность, 
   но редко пользуются ошибками первого и второго рода?
   
       \item классификатор выдает решение $p \in [0, 1]$, однако для решения
