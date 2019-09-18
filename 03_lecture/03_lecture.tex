@@ -3,6 +3,7 @@
 \usecolortheme{rose}
 
 \usepackage{tikz}
+\usepackage{multicol}
 
 \hypersetup{unicode=true}
 \usepackage[normalem]{ulem}  % для зачекивания текста
@@ -213,15 +214,90 @@
   	\input{./../pic/desicion_tree_building/outlier.tikz.tex}
   	\end{tikzpicture}
   \end{center}
-
-  
-  
   
   \begin{block}{Замечание.}
   Строгого определения термина \term{выброс}, не существует.
   \end{block}
-  
   \end{frame}
+  
+\begin{frame}{Индекс Джини}
+  \small
+  Пусть $n$ -- это количество классов. 
+  (В нашем примере $n=2$).
+  
+  Зафиксируем некое \term{замкнутое подпространство} признаков и назовём его 
+  бином\footnote{от англ \textbf{bin [bɪn]} -- контейнер, емкость, бак, урна.}
+  ($bin$).
+  
+  Определим $\Delta_i$ -- доля объектов класса $i$ относительно всех объектов в данном бине:
+  \begin{equation}
+  \Delta_i \stackrel{def}{=} \frac{ \parallel \{y \mapsto \bold x : y = y_i \wedge \bold x \in bin \} \parallel}
+  {
+  	\parallel \{y \mapsto \bold x :  \bold x \in bin \} \parallel
+  }
+  \end{equation}	
+ \begin{center}  
+	  \begin{tikzpicture}[scale=1.5]
+	  \input{./../pic/bin_example.tikz.tex}
+	  \end{tikzpicture} 
+	  Пример:
+	    $\Delta_0 = \frac{2}{5}$; 
+	  $\Delta_1 = \frac{3}{5}$
+  \end{center}
+	
+\end{frame}
+
+\begin{frame}{Индекс Джини}
+    \small
+	\termdef{Индекс (загрязненности) Джини} (Gini impurity) 
+	некоего бина $bin$ -- это величина, вычисленная по формуле:
+	\begin{equation}
+	\delta = 1 - \sum_{i=0}^{n-1} \Delta_i ^ 2
+	\end{equation}
+	
+	
+	\begin{center}
+	Пример:
+		\begin{tikzpicture}[scale=1.5]
+		\input{./../pic/bin_example.tikz.tex}
+		\end{tikzpicture} 
+	\end{center}
+	
+	\begin{equation*}
+		\delta = 1 - \left( \frac{2}{5}\right)^2 - \left( \frac{3}{5}\right)^2 = 
+		1 - \frac{13}{25} = \frac{12}{25} 
+	\end{equation*}
+	
+	
+	\begin{block}{Замечание}
+		Не путайте \term{Индекс Джини} и 
+		\term{Коэфициент Джини}. Это разные понятия.
+	\end{block}
+\end{frame}
+
+
+\begin{frame}{Альтернативы Индекса Джини}
+	Более <<классическим>> критерием является 
+	\termdef{(информационная) энтропия по Шеннону}:
+	\begin{equation}
+	H(bin) = - \sum_{i=0}^{n-1} \Delta_i \cdot log_n \Delta_i 
+	\end{equation}
+	Однако на практике её вычислять достаточно долго. 
+	Индекс Джини, это <<математически кастрированная энтропия>>,
+	дающая почти те же результаты за более быстрое время.
+	
+
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\textbf{Шаг 1.} Определим случайно 
+
+\end{frame}
+  
   
   \section{Список материалов}
   
@@ -259,6 +335,20 @@
   \end{enumerate}
   
   \end{frame}
+
+
+\begin{frame}{Индекс Джини и бины}
+	\begin{enumerate}
+		\item Почему на практике используют индекс Джини, а не энтропию по Шеннону? 
+		Можете придумать ещё более простую меру загрязнённости, чем индекс Джини?
+		\item При каких условиях индекс Джини равен нулю? При каких 1/2 ? 
+		При каких равен 1? При каких условиях не определён?
+		\item Докажите что для любого количества классов $n$, индекс Джини лежит в границах: $\delta \in [0, \frac{1}{2}]$.
+		\item Почему бины обязательно квадратные, а не круглые или треугольные? Какая разница
+		в каком подпространстве признаков рассчитывать индекс Джини? 	
+	\end{enumerate}
+\end{frame}
+
   
   
 

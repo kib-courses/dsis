@@ -1,0 +1,13 @@
+    \tikzstyle{F}=[circle,thick,fill=red,minimum size=1mm]
+    \tikzstyle{L}=[rectangle,thick,fill=blue,minimum size=1mm]
+   
+   \node [L] at (0.1, 0.2) {};
+   \node [L] at (0.5, 0.5) {};
+   \node [F] at (0.2, 0.7) {};
+   \node [F] at (0.8, 0.8) {};
+   \node [F] at (0.5, 0.2) {};
+   
+   \draw [thick, dotted] (0,0) -- (0,1);
+   \draw [thick, dotted] (0,1) -- (1,1);
+   \draw [thick, dotted] (1,1) -- (1,0);
+   \draw [thick, dotted] (1,0) -- (0,0);
