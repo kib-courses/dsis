@@ -10,9 +10,6 @@
 
 \setbeamertemplate{footline}[frame number] % указывает на каждой странице общее количество страниц
 
-
-
-
 % Указывайте все новые термины в \termdef команде. А уже известные ранее или из других курсов в \term
 \newcommand{\termdef}[1]{\textbf{\textit{#1}}}
 \newcommand{\term}{\textit}
@@ -20,9 +17,9 @@
 \newcommand{\auditorium}[1]{\color{red}{\textbf{#1}}}
 % \setbeamercolor{auditorium}{fg=red}
 
-\title{Лекция 2. Задачи машинного обучения. Основные параметры качества.}
+\title{Лекция 2, часть I. Классификация. Основные понятия.}
 % \date{\today}
-\date{9 сентября 2019}
+\date{24 сентября 2019}
 \author{Павел Владимирович Слипенчук}
 \institute{Москва, МГТУ им.Бауманка,\\ каф.ИУ-8, КИБ}
 % \titlegraphic{\includegraphics[width=2cm]{logo_ur.jpg}}
@@ -75,12 +72,30 @@
 	  в данных на реальных задачах \term{вектор признаков} может состоять из $~200$ и более признаков:
 	  $\bold x = (x_1, x_2, ..., x_{200}, ...)$
   \end{block}
-  \end{frame}
+   \end{frame}
+
+  \begin{frame}
+\begin{block}{Замечание}
+	Иногда можно встретить ещё два понятия: \term{характеристика} и \term{контрибутор}.
+	
+	\termdef{Характеристика} -- это какая-либо информация из которой можно получить один
+	или более признаков.
+	
+	\termdef{Контрибутор} (контрибьютер) -- это совокупность признаков (возможно один),
+	который вносит определённый вклад в скоринговую модель. 
+	
+	Однако можно считать эти термины устаревшими, так как
+	\term{Feature Extraction} ввело понятие \term{<<сырые данные>>} (raw data)
+	и убило понятие характеристика; 
+	а ансамбли сделали ненужным термин контрибутор.
+\end{block}
+\end{frame}
+
   
   \begin{frame}{Функция высшего порядка}
   \termdef{Функция высшего порядка} -- это функция, принимающая в качестве аргументов хотя бы одну другую функцию и/или возвращающая в качестве выхода функцию.
   
-  См.так же:
+  \auditorium{ДЗ. см.так же:}
   \begin{enumerate}
   	\item \termdef{функциональное программирование}
   	\item \termdef{декоратор}, \termdef{фабрика декораторов}
@@ -89,12 +104,15 @@
   \end{frame}
   
   \begin{frame}{Классификация. Постановка задачи}\label{frame:classification_def}
+  	\small
   	Определим \term{неупорядоченную совокупность}:
   	\begin{equation}\label{eq:def_fit_sample}
   	U_{fit} = \left\{ y \mapsto \bold x  \right\}
   	\end{equation}
+  	где $y$ -- это \term{класс},
+  	а $\bold x$ -- это \term{вектор признаков}.
   	Множество \eqref{eq:def_fit_sample} будем называть \termdef{обучающей выборкой}.
-  	
+ 
   	Функцию, отображающую вектор $\bold x$ в значения на интервале $[0, 1]$ будем 
   	называть \termdef{функцией скоринга}:
   	\begin{equation}\label{eq:score_def}
@@ -106,11 +124,12 @@
   	\term{функции скоринга}\eqref{eq:score_def} 
   	из 
   	\term{обучающей выборки}\eqref{eq:def_fit_sample}.
-  	Таким образом можно определить \term{функцию высшего порядка}:
+  	Таким образом можно определить \term{функцию высшего порядка} $fit$:
   	\begin{equation}\label{eq:fit_def}
   	score := fit (U_{fit}) 
   	\end{equation}
   \end{frame}
+
 
 	\begin{frame}
 	Как правило множество $U_{fit}$ задается парой:
@@ -120,23 +139,42 @@
 	где $\bold X$ и $\bold y$ -- это \textbf{упорядоченные} совокупности (списки)
 	из \term{векторов признаков} $\bold  x$ и соответствующих им \term{классов} $y$. 
 	
-	См.например:
-	\url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html\#sklearn.ensemble.RandomForestClassifier.fit}
+	% См.например:
+	%\url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html\#sklearn.ensemble.RandomForestClassifier.fit}
+	
+	То есть:
+	\begin{equation}
+	\bold X \stackrel{def}{=} \left( 
+	(x_1^1, x_2^1, ..., x_n^1),
+	(x_1^2, x_2^2, ..., x_n^2),
+	... ,
+	(x_1^m, x_2^m, ..., x_n^m)
+	\right)
+	\end{equation}
+	\begin{equation}
+	\bold y \stackrel{def}{=} (y^1, y^2, ..., y^m) 
+	\end{equation}
+	где верхние цифры -- это индексы, а не степени.
 	\end{frame}
 
 
 	  
 	\begin{frame}{Классификация}
+	\small
 	Функция $fit$ (cм. \eqref{eq:fit_def} на слайде №\ref{frame:classification_def}) возвращает функцию $score$, которая размечает каждую точку пространства признаков на величину от 0 до 1. Чем ближе эта величина к 1, тем <<более вероятно>> что это класс 1, чем ближе к 0 -- тем более вероятно что класс 0.
 	\begin{center}
-		\includegraphics[width=8cm]{../pic/classification_example.png}\centering
+		\includegraphics[width=7.5cm]{../pic/classification_example.png}\centering
 	\end{center}
+    \begin{block}{Замечание}
+    Иногда для удобства fit возвращает не в диапазоне $[0, 1]$,
+    а в диапазоне $[-1, 1]$.
+    \end{block}
 \end{frame}
 
 
  \begin{frame}
 	 \begin{block}{Замечание}
-	 	$U_{fit}$ в общем случае это именно неупорядоченная совокупность, а не множество. Во множестве ни один элемент не может быть представлен более одного раза, а в неупорядоченной совокумности -- может. Для простоты в дальнейшем 	$U_{fit}$ будем называть множеством.
+	 	$U_{fit}$ в общем случае это именно неупорядоченная совокупность, а не множество. Во множестве ни один элемент не может быть более одного раза, а в неупорядоченной совокупности -- может. Для простоты в дальнейшем 	$U_{fit}$ будем называть множеством.
 	 \end{block}
 	\begin{block}{Замечание}
 		Иногда функция $fit$ представляет собой \term{ленивое вычисление}\footnote{
@@ -145,7 +183,7 @@
 		пока не понадобится их результат.
 		} и выдаёт $score$ почти мгновенно. И уже для каждого конкретного $\bold x$ функция
 		$score(\bold x)$ рассчитывает \term{отклик} $\hat{y}$ на основании 
-		\term{обучающей выборке} \term{} $U_{fit}$
+		\term{обучающей выборки} \term{} $U_{fit}$
 	\end{block}
    \end{frame}
   
@@ -313,7 +351,7 @@
 	\end{frame}
 
 	\begin{frame}{Полнота и точность}
-	Введём величину $coef_{legitim}$ -- это отношение количества легитимных транзакций во всей выборке, 
+	Введём величину $q_{legitim}$ -- это отношение количества легитимных транзакций во всей выборке, 
 	делённая на количество легитимных транзакций в  $U_{test}$.
 	
 	Для любой отсечки $offset$ можем вычислить \termdef{полноту} ($\Pi$, recall) и \termdef{точность} ($T$, precision):
@@ -321,7 +359,7 @@
 		\Pi = \frac{ctp}{ctp + cfn}
 		\end{equation}
 		\begin{equation}\label{eq:presicionl_by_counts}
-		T = \frac{ctp}{ctp + cfp \cdot coef_{legitim}}
+		T = \frac{ctp}{ctp + cfp \cdot q_{legitim}}
 		\end{equation}
 	\end{frame}
 
