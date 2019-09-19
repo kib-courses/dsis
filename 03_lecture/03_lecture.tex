@@ -252,7 +252,7 @@
 	\termdef{Индекс (загрязненности) Джини} (Gini impurity) 
 	некоего бина $bin$ -- это величина, вычисленная по формуле:
 	\begin{equation}
-	\delta = 1 - \sum_{i=0}^{n-1} \Delta_i ^ 2
+	\delta (bin)= 1 - \sum_{i=0}^{n-1} \Delta_i ^ 2
 	\end{equation}
 	
 	
@@ -264,7 +264,7 @@
 	\end{center}
 	
 	\begin{equation*}
-		\delta = 1 - \left( \frac{2}{5}\right)^2 - \left( \frac{3}{5}\right)^2 = 
+		\delta (bin) = 1 - \left( \frac{2}{5}\right)^2 - \left( \frac{3}{5}\right)^2 = 
 		1 - \frac{13}{25} = \frac{12}{25} 
 	\end{equation*}
 	
@@ -294,10 +294,110 @@
 
 
 \begin{frame}
-\textbf{Шаг 1.} Определим случайно 
+	\small
+	\textbf{Шаг 1.} Определим случайно один из признаков. Допустим это $x_1$. 
+	Определим случайно величину на отрезке $x_1$. Пусть это некое $a_1$. 
+	Начертим ось, перпендикулярную $x_1$ и проходящую через $(a_1, 0)$.
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+		\input{./../pic/desicion_tree_building/2.tikz.tex}
+		\end{tikzpicture}
+	\end{center}
+	Таким образом мы разбили простраство признаков
+	$R^n=R^2$ на два \term{бина}:
+	\begin{enumerate}
+		\item $r(x_1=a_1)$ -- бин, для которого $x_1 \geqslant a_1$;
+		\item $l(x_1=a_1)$ -- бин для которого $x_1 < a_1$.
+	\end{enumerate}
+\end{frame}
 
+\begin{frame}
+	\small
+	Посчитаем индекс Джини для каждого бина и сравним его с $\delta_{stop}$:
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+		\input{./../pic/desicion_tree_building/2.tikz.tex}
+		\end{tikzpicture}
+	\end{center}
+	\begin{equation*}
+	\delta \left(r(x_1=a_1)\right) = 
+	1 - \left(\frac{6}{7}\right)^2 - \left( \frac{1}{7}\right)^2 =
+	\frac{12}{49} \leqslant 0.25 = \delta_{stop}
+	\end{equation*}
+	\begin{equation*}
+	\delta \left(l(x_1=a_1)\right) = 
+	1 - \left( \frac{13}{23} \right)^2 - \left( \frac{10}{23} \right)^2 
+	= \frac{260}{529} \approx 0,49149 > 0.25 = \delta_{stop}
+	\end{equation*}
+	Если индекс джини не больше $\delta_{stop}$, то в рамках данного бина выносим 
+	вердикт. Иначе повторяем шаг 1, в рамках выбранного бина.
+\end{frame}
+
+\begin{frame}{Пересечение бинов}
+	Определим операцию $bin_1 \cap bin_2$ -- означающую пересечение бинов.
+	
+	Например:
+	\begin{equation*}
+	r(x_1=a_1)  \cap r(x_2=a_2) \cap l(x_1=a_3)
+	\end{equation*}
+	Означает:
+	\begin{equation*}
+    \begin{cases}
+    x_1 \geqslant  a_1 \\
+    x_2 \geqslant a_2 \\
+    x_1 < a_3 \\
+    \end{cases}
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\small
+	\textbf{Шаг 2.} Допустим что теперь случайным образом выбрали $x_2$.
+	Определили $a_2$.
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+		\input{./../pic/desicion_tree_building/3.tikz.tex}
+		\end{tikzpicture}
+	\end{center}
+	\begin{equation*}
+	\delta \big(l(x_1=a_1) \cap r(x_2=a_2)\big) = 
+	1 - \left( \frac{11}{17} \right)^2 - \left( \frac{6}{17} \right)^2
+	= \frac{132}{289} \approx 0,4567 > 0.25
+	\end{equation*}
+		\begin{equation*}
+	\delta \big(l(x_1=a_1) \cap l(x_2=a_2)\big) = 
+	1 - \left( \frac{2}{6} \right)^2  - \left( \frac{4}{6} \right)^2  
+	= \frac{16}{36} \approx 0.4444 > 0.25
+	\end{equation*}
+	Вывод: в обоих бинах строим дерево решений дальше. Нет остановки.
+\end{frame}
+
+\begin{frame}
+	\textbf{Шаг 3}.
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+		\input{./../pic/desicion_tree_building/4.tikz.tex}
+		\end{tikzpicture}
+	\end{center}
+	Очень удачный шаг. 
+	Остался бин $r(x_1=a_1) \cap r(x_2=a_2) \cap r(x_2=a_3)$.
 \end{frame}
   
+\begin{frame}
+	\small
+	\textbf{Шаг 4}.
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+		\input{./../pic/desicion_tree_building/5.tikz.tex}
+		\end{tikzpicture}
+	\end{center}
+	Конец алгоритма. Индекс Джини всех бинов не больше чем $\delta_{stop}$.
+	\begin{block}{Замечание}
+		Данное дерево было построено случайным образом. 
+		При повторном запуске алгоритма может получится другое дерево.
+	\end{block}
+\end{frame}
+
   
   \section{Список материалов}
   
