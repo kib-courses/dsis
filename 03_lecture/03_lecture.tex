@@ -373,14 +373,21 @@
 \end{frame}
 
 \begin{frame}
+	\small
 	\textbf{Шаг 3}.
+	В бине $\big(l(x_1=a_1) \cap r(x_2=a_2)\big)$
+	случайно выбрали $x_2$ и $a_3$.
+	
+	В бине $ \big(l(x_1=a_1) \cap l(x_2=a_2)\big)$
+	случайно выбрали $x_1$ и $a_4$.
+	
 	\begin{center}
 		\begin{tikzpicture}[scale=1.5]
 		\input{./../pic/desicion_tree_building/4.tikz.tex}
 		\end{tikzpicture}
 	\end{center}
 	Очень удачный шаг. 
-	Остался бин $r(x_1=a_1) \cap r(x_2=a_2) \cap r(x_2=a_3)$.
+	Остался бин $l(x_1=a_1) \cap r(x_2=a_2) \cap l(x_2=a_3)$.
 \end{frame}
   
 \begin{frame}
@@ -398,8 +405,46 @@
 	\end{block}
 \end{frame}
 
+\begin{frame}{Случайное дерево решений.}
+	\small
+	Случайное дерево решений -- это 
+	\term{бинарный} классификатор,
+	возаращающий априорную вероятность:
+	\begin{itemize}
+		\item $p=0$ -- легитимная операция
+		\item $p=1$ -- мошенническая операция
+	\end{itemize}
+
+	\begin{wrapfigure}{l}{0.6\textwidth}
+	\vspace{-25pt}
+	\begin{tikzpicture}[scale=1.5]
+		\input{./../pic/desicion_tree_building/zones.tikz.tex}
+	\end{tikzpicture}
+	\end{wrapfigure}
+
+	На рисунке бины, для которых $p=0$ отмечены голубыми областями,
+	а бины, для которых $p=1$ отмечены красными областями.
+\end{frame}
+
+\begin{frame}{Точки остановки}
+	Помимо \term{индекса Джини} (параметр $min\_impurity\_split$ в scikit-learn)
+	можно использовать другие точки остановки:
+	\begin{itemize}
+		\item Количество данных (векторов признаков)
+		в бине меньше $min\_samples\_split$;
+		\item Глубина дерева достигла $max\_depth$.
+	\end{itemize}
+	
+	\auditorium{ДЗ. Посмотреть: \url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier}}
+\end{frame}
+
+\section{Случайный Лес (Random Forest)}\label{section:random_forest}
+
+\begin{frame}
+	
+\end{frame}
   
-  \section{Список материалов}
+\section{Список материалов}
   
   \begin{frame}{Случайные леса}
   Сергей Павлович Чистяков \textbf{<<Случайные леса: обзор>>}\footnote{\tiny
@@ -449,7 +494,19 @@
 	\end{enumerate}
 \end{frame}
 
-  
+
+
+\begin{frame}{Случайное дерево. Случайный лес.}
+	\begin{enumerate}
+	\item С помощью кванторов и слов 
+	напишите строгий академический алгоритм,
+	описывающий построение случайного дерева 
+	над пространством признаков $R^n$.
+	\item Аналогично п.1, напишите 
+	строгий академический алгоритм,
+	описывающий построение случайного леса
+	\end{enumerate} 
+\end{frame} 
   
 
 \end{document}
