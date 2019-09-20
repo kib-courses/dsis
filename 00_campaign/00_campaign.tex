@@ -1,42 +1,5 @@
-\documentclass{beamer}
-\usetheme{metropolis} 
-\usecolortheme{rose}
-
-\hypersetup{unicode=true}
-\usepackage{tikz}
-
-\usepackage{xcolor}
-\usepackage[utf8]{inputenc}
-\usepackage{hyphenat}
-\usepackage[russian,english]{babel}          % Use metropolis theme
-\usepackage{wrapfig}
-
-\usepackage[normalem]{ulem}  % для зачекивания текста
-
-\usepackage{caption}
-\captionsetup[figure]{name=Рисунок }
-\newcommand{\рис}[1]{рис.\ref{#1}}
-\newcommand{\Рис}[1]{Рис.\ref{#1}}
-
-\captionsetup[table]{name=Таблица~№}
-\newcommand{\таблицa}[1]{таблица~№\ref{#1}} % именительный падеж
-\newcommand{\таблицы}[1]{таблицы~№\ref{#1}} % родительный падеж
-\newcommand{\таблице}[1]{таблице~№\ref{#1}} % дательный и предложный падеж
-\newcommand{\таблицу}[1]{таблицу~№\ref{#1}} % винительный падеж
-\newcommand{\таблицей}[1]{таблицей~№\ref{#1}} % творительный падеж 
-\newcommand{\Таблицa}[1]{Таблица~№\ref{#1}} % именительный падеж
-\newcommand{\Таблицы}[1]{Таблицы~№\ref{#1}} % родительный падеж
-\newcommand{\Таблице}[1]{Таблице~№\ref{#1}} % дательный и предложный падеж
-\newcommand{\Таблицу}[1]{Таблицу~№\ref{#1}} % винительный падеж
-\newcommand{\Таблицей}[1]{Таблицей~№\ref{#1}} % творительный падеж 
-
-\setbeamertemplate{footline}[frame number] % указывает на каждой странице общее количество страниц
-
-% Указывайте все новые термины в \termdef команде. А уже известные ранее или из других курсов в \term
-\newcommand{\termdef}[1]{\textbf{\textit{#1}}}
-\newcommand{\term}{\textit}
-% Диалог с аудиторией.
-\newcommand{\auditorium}[1]{\color{red}{\textbf{#1}}}
+\input{./../header/kib.tex}
+\input{./../header/user.tex}
 
 \title{Вводная лекция. Цели и задачи курса}
 % \date{\today}
