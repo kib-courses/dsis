@@ -232,4 +232,29 @@ if-else
 
 Посчитайте полноту и точность.
 
+### К лекции №2
 
+**Упражнение №6**
+
+Почитайте про случайный лес в [мануалах scikit](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier)
+
+Научитесь обучать лес и запускать его.
+
+**Упражнение №7**
+
+Научитесь визуализировать деревья. Почитайте:
+
+  * [sklearn.tree.export_graphviz](https://scikit-learn.org/stable/modules/generated/sklearn.tree.export_graphviz.html#sklearn.tree.export_graphviz)
+  * [How to Visualize a Decision Tree from a Random Forest in Python using Scikit-Learn](https://towardsdatascience.com/how-to-visualize-a-decision-tree-from-a-random-forest-in-python-using-scikit-learn-38ad2d75f21c)
+
+**Задача №4**
+
+Посмотрите на данные из выборки ещё раз. Обучите RF на этих данных.
+Сравните RF c алгоритмами **p1_fraud**, **p2_fraud** и **p3_fraud**.
+
+**Задача №5**
+
+Подумайте, как с помощью RF оценивать информативность признаков?
+Найдите информативные признаки. 
+
+Сравните результаты с результатами **упражнения №1**.
