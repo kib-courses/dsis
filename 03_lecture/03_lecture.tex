@@ -144,12 +144,24 @@
 \section{RSA Risk Engne}
 
 \begin{frame}{Общая схема} 
-	\includegraphics[width=14cm]{../pic/expert_system_rsa.png}
+	\includegraphics[width=11.5cm]{../pic/expert_system_rsa.png}
 	% \includegraphics[width=5cm]{../pic/anohin.jpg}	
 \end{frame}
 
 \begin{frame}{Последовательность}
+	
+	\begin{enumerate}
+		\item Выбираются данные за $T=90$ дней.
+		% \item Выбираются <<фиксированные>> данные.
+		\item Строится 
+	\end{enumerate}
+
 \end{frame}
+
+\begin{frame}{Обратная связь}\label{frame:rsa_feedback}
+\includegraphics[width=11.5cm]{../pic/expert_system_rsa_feedback.png}
+\end{frame}
+
 
 \section{RSA Rules Engine}
 
@@ -187,6 +199,21 @@
 		Действительно ли система работает нестабильно? 
 		Приведите контрпримеры.
 		
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{RSA}
+	\begin{enumerate}
+		\item На слайде №\ref{frame:rsa_feedback} не указаны действия
+		обратной связи для ALLOW операции. Т.е. не производится никаких работ. 
+		Почему?
+		\item На слайде №\ref{frame:rsa_feedback} не указан процесс получения 
+		по жалобам клиентов. По каким решениям ФМ системы возможны жалобы? 
+		Приведите пример жалоб для ALLOW систем. 
+		\item Почему если произошла операция DENY на правило "перевыпуск СИМ карт", 
+		сотрудники коллцентра не могут разблокировать профиль позвонившим
+		недовольным клиентам банка? Почему необходима либо более сложная аутентификация, чем 
+		телефонный звонок?
 	\end{enumerate}
 \end{frame}
 
