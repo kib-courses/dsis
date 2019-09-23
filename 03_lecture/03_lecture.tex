@@ -1,0 +1,193 @@
+\input{./../header/kib.tex}
+\input{./../header/user.tex}
+
+\title{Лекция 3. RSA Risk Engine, RSA Rules Engine}
+% \date{\today}
+\date{8 октября 2019}
+\author{Павел Владимирович Слипенчук}
+\institute{Москва, МГТУ им.Бауманка,\\ каф.ИУ-8, КИБ}
+% \titlegraphic{\includegraphics[width=2cm]{logo_ur.jpg}}
+\titlegraphic{\small \href{https://github.com/kib-courses/dsis}{Data Science для решения задач информационной безопасности}}
+
+\begin{document}
+  \maketitle
+    
+\begin{frame}{План лекции}
+    \begin{enumerate}
+		\item \nameref{section:feedback}
+	% \item \nameref{section:precision_recall_defs}
+	% \item \nameref{section:tree_forest}
+	% \item \nameref{section:random_tree_building}
+	% \item \nameref{section:random_forest}
+	\end{enumerate}
+\end{frame}
+
+\section{Обратная связь}\label{section:feedback}
+
+\begin{frame}{Историческая заметка}
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\includegraphics[width=5cm]{../pic/anohin.jpg}
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\begin{enumerate}
+				\item В 1935 году советский физиолог
+				Пётр Кузьмич Анохин формулирует понятие обратной связи.
+				\item Термин «перекочевал» в Кибернетику (1948) Н.Винера
+				\item В настоящее время термин «обратная связь» используется в медицине, в технике, в акустике, в биологии, в социальных науках.
+			\end{enumerate}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Обратная связь в DS}
+	\termdef{Обратная связь (feedback) I}  --
+	это любая информация, используемая для оценки качества ЭС
+	и/или для получения новой \term{обучающей выборки} (или выборки \term{обучения с подкреплением})
+	
+	\termdef{Обратная связь (feedback) II} -- это процесс, система, 
+	программный модуль, реализующий обратную связь I
+\end{frame}
+
+\begin{frame}{Обучение с подкреплением, reinforcement learning (Дообучение, Refitting)\footnote{слайд из лекции №2}}
+	\small
+	Есть первоначальная обучающая выборка: 
+	\begin{equation*}
+		U_{fit} = \left\{ y \mapsto \bold x  \right\}
+	\end{equation*}
+	Первоначальное обучение:
+	\begin{equation*}
+		score_1 := fit (U_{fit}) 
+	\end{equation*} 
+	В дальнейшем при получении нового множества $\hat U_{fit}$ (возможно состоящее из одного элемента)
+	мы дообучаем систему:
+	\begin{equation}
+		score_{i+1} := refit (\hat U_{fit}, score_{i}) 
+	\end{equation} 
+	Таким образом функция $score_i$ заменяется на новую функцию $score_{i+1}$.
+\end{frame}
+
+\begin{frame}{Итеративное обучение}
+	\small
+	Есть первоначальная обучающая выборка: 
+	\begin{equation*}
+	\hat U_1 = U_{fit} = \left\{ y \mapsto \bold x  \right\}
+	\end{equation*}
+	Первоначальное обучение:
+	\begin{equation*}
+	score_1 :=   fit (\hat U_{1}) = fit (U_{fit}) 
+	\end{equation*} 
+	В дальнейшем при получении нового множества $\hat U_{i}$ (возможно состоящее из одного элемента)
+	мы повторно обучаем систему:
+	\begin{equation}
+	score_{i+1} := fit ( U_{fit} \cup \hat U_2 \cup ... \cup  \hat U_{i}) 
+	\end{equation} 
+	Таким образом функция $score_i$ заменяется на новую функцию $score_{i+1}$.
+\end{frame}
+
+\begin{frame}
+	\auditorium{Верно ли утверждение что итеративное обучение позволяет для любого алгоритма
+	осуществить обучение с подкреплением?}
+\end{frame}
+
+\begin{frame}{Стабильность. <<Цепочка>>}\label{frame:chain_score}
+	Есть итеративная система обучения и имеем скоринги:
+	\begin{equation*}
+	score_{i-n} := fit ( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i-n} \cup ... \cup \hat U_{i-1} \cup \hat U_{i}) 
+	\end{equation*}
+	\begin{equation*}
+	...
+	\end{equation*}
+	\begin{equation*}
+	score_{i-1} := fit ( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i-1} \cup \hat U_{i}) 
+	\end{equation*}
+	\begin{equation*}
+	score_{i} := fit ( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i}) 
+	\end{equation*}
+	
+	Тогда задав веса $w_j > 0$ можно сделать простой ансамбль вида:
+	\begin{equation*}
+	\bold {score_{i}}(\bold x) = \frac{w_1 \cdot score_{i-n}(\bold x) + ... + w_n \cdot score_{i}(\bold x)}{\sum_{j=1}^{n} w_j} 
+	\end{equation*}
+	
+	Например:
+	\begin{equation*}
+	\bold {score_{i}}(\bold x) = 
+		0.2 \cdot score_{i-2}(\bold x) 
+		+ 0.3 \cdot score_{i-1}(\bold x) 
+		+ 0.5 \cdot score_{i}(\bold x) 
+	\end{equation*}
+\end{frame}
+
+
+\begin{frame}
+	Возвращаемся к обратной связи
+	\Large
+	\begin{center}
+		\auditorium{Зачем нужна обратная связь в DS?}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	Feedback позволяет:
+	\begin{enumerate}
+		\item Изменить $score$ на основании предыдущих \term{откликов}
+		и размеченных данных. Например при каждой сработке 
+		можно с вероятностью $p$ проводить расследование и дообучать систему.
+		\item генетические алгоритмы: изменение параметров
+		\item позволяет выявлять аномалии\footnote{<<аномалитика>> :) },
+		корректировать мат.модель, выбирать из ML моделей лучшую.
+	\end{enumerate}
+\end{frame}
+
+
+\section{RSA Risk Engne}
+
+\begin{frame}{Общая схема} 
+	\includegraphics[width=14cm]{../pic/expert_system_rsa.png}
+	% \includegraphics[width=5cm]{../pic/anohin.jpg}	
+\end{frame}
+
+\begin{frame}{Последовательность}
+\end{frame}
+
+\section{RSA Rules Engine}
+
+
+  
+\section{Вопросы для самопроверки}
+
+\begin{frame}
+	Прочитайте, что такое <<генетические алгоритмы>>(genetic algorithm).
+	В чём роль обратной связи в них?
+	
+	Предложите структуру гена генетического алгоритма, создающий стратегии игры в крестики нолики. 
+	
+	Для желающих: реализуйте его (вместо какой-нибудь лабораторной). 
+	<<стравите>> разные гены друг с другом и путём <<эволюции>>
+	получите самый сильный алгоритм.
+	
+	Стал ли полученный алгоритм оптимальным? Сыграйте несколько партий. Сколько раз выиграли, 
+	сколько проиграли, сколько раз сыграли вничью?
+	
+\end{frame}
+
+\begin{frame}{Обратная связь и итеративное обучение}
+	\begin{enumerate}
+		\item В <<цепочке>> (см. слайд №\ref{frame:chain_score}) задана функция
+		$\bold score$ с коэффициентами $(0.1, 0.2, 0.7)$. Каков будет скоринг, 
+		если $score_1=540$, $score_2=546$, $dscore_3=584$?
+		\item В <<цепочке>> задана функция 	$\bold score$ 
+		с коэффициентами $(0.2, 0.4, 0.8)$. Значения $score_1, score_2, score_3$
+		равны $345$, $124$ и $573$. Почему $\bold score$ 
+		будет $412$, 
+		а не $577$ ?
+		\item Предположим, что $score_{i+1}$ 
+		сильно больше чем $score_i$. Что это значит? 
+		Действительно ли система работает нестабильно? 
+		Приведите контрпримеры.
+		
+	\end{enumerate}
+\end{frame}
+
+\end{document}
