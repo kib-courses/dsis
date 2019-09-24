@@ -391,10 +391,11 @@
 \end{frame}
 
 \begin{frame}{Формальное определение}
-	\termdef{Дерево} -- это \fbox{связанный} \fbox{ациклический} \fbox{граф}.
+	\termdef{Дерево} -- это \fbox{связанный} \fbox{ациклический} \fbox{граф}
+	имеющий выделенную вершину -- \fbox{корень} .
 	
 	\termdef{Дерево решений} -- это \fbox{дерево}, в терминальных вершинах которых 
-	определён \term{отклик}, в остальных \fbox{листьях} -- функции\footnote{
+	определён \term{отклик}, в остальных \fbox{узлах} -- функции\footnote{
 	на практике -- \term{булевые} функции, но в общем определении -- не обязательно.}
 	каждый выход из которых определяет метку какого-либо выходящего \fbox{ребра}.
 \end{frame}
@@ -432,9 +433,9 @@
 	\begin{block}{Замечание.}
 	\small
 	Лес решений -- это не обязательно среднее арифметическое \term{откликов}.
-	\begin{equation*}
+	\begin{equation}\label{eq:ensemble_p}
 	p = \frac{1}{N} \cdot \sum_{i=1}^{N} \hat y_i
-	\end{equation*}
+	\end{equation}
 	где $\hat y = 1$, если подозрение на мошенничество или $\hat y =0$ иначе.
 	
 	Можно каждому $i$-му дереву  присвоить вес $w_i \geqslant 0$ и по разному его взвешивать:
@@ -443,6 +444,8 @@
 	\end{equation*}
 	Однако на практике в этом нет смысла.
 	\end{block}
+
+	\auditorium{Как изменится формула \eqref{eq:ensemble_p}, если добавить отклик <<отказ от классификации>>?}
 \end{frame}
 
 \section{Построение случайного дерева решений.}\label{section:random_tree_building}
@@ -618,8 +621,8 @@
 	1 - \left( \frac{13}{23} \right)^2 - \left( \frac{10}{23} \right)^2 
 	= \frac{260}{529} \approx 0,49149 > 0.25 = \delta_{stop}
 	\end{equation*}
-	Если индекс джини не больше $\delta_{stop}$, то в рамках данного бина выносим 
-	вердикт. Иначе повторяем шаг 1, в рамках выбранного бина.
+	Если индекс Джини не больше $\delta_{stop}$, то в рамках данного бина выносим 
+	вердикт (отклик). Иначе повторяем шаг 1, в рамках выбранного бина.
 \end{frame}
 
 \begin{frame}{Пересечение бинов}
@@ -704,7 +707,7 @@
 	\item $p=1$ -- мошенническая операция
 	\end{itemize}
 
-	\begin{wrapfigure}{l}{0.6\textwidth}
+	\begin{wrapfigure}{l}{0.65\textwidth}
 	\vspace{-25pt}
 	\begin{tikzpicture}[scale=1.5]
 	\input{./../pic/desicion_tree_building/zones.tikz.tex}
@@ -713,6 +716,7 @@
 	
 	На рисунке бины, для которых $p=0$ отмечены голубыми областями,
 	а бины, для которых $p=1$ отмечены красными областями.
+	
 \end{frame}
 
 \begin{frame}{Точки остановки}
@@ -777,7 +781,7 @@
 	в которой совершенно некомпетентны
 	и/или решаете задачу, про которую ничего не знаете --
 	используйте случайный лес.
-	Этот алгоритм М.О. -- самый лучшый!>>
+	Этот алгоритм М.О. -- самый лучший!>>
 	\end{block}
 	Это совершенно <<не академично>>, но истинно.
 	
@@ -819,24 +823,28 @@
 \section{Список материалов}
 
 \begin{frame}{Случайные леса}
-	Сергей Павлович Чистяков \textbf{<<Случайные леса: обзор>>}\footnote{\tiny
-	\url{http://resources.krc.karelia.ru/transactions/doc/trudy2013/trudy_2013_1_117-136.pdf}
-	}
+	Сергей Павлович Чистяков \href{http://resources.krc.karelia.ru/transactions/doc/trudy2013/trudy_2013_1_117-136.pdf}{<<Случайные леса: обзор>>}
+	
+	А.Дьяконов 
+	\href{https://dyakonov.org/2016/11/14/\%D1\%81\%D0\%BB\%D1\%83\%D1\%87\%D0\%B0\%D0\%B9\%D0\%BD\%D1\%8B\%D0\%B9-\%D0\%BB\%D0\%B5\%D1\%81-random-forest/}{<<Случайный лес (Random Forest)>>}
 	
 	\textbf{sklearn}:
 	\begin{itemize}
-	\item sklearn.ensemble.RandomForestClassifier\footnote{
-	\tiny \url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html}
-	}
-	\item sklearn.ensemble.RandomForestRegressor\footnote{
-	\tiny
-	\url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html}
-	}
-	\item sklearn.ensemble.IsolationForest\footnote{
-	\tiny
-	\url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html}
-	}
+	\item \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html}{sklearn.ensemble.RandomForestClassifier}
+	\item \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html}{sklearn.ensemble.RandomForestRegressor}
+	\item \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html}{sklearn.ensemble.IsolationForest}
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Support Vector Machines}
+	
+	Для любителей математики only.
+
+	Попробуйте самостоятельно понять, как работает SVM.
+	
+	Из академических работ рекомендую Алексея Нефёдорова
+	\href{https://svmtutorial.online}{<<Support Vector Machines: A Simple Tutorial>>}
+	
 \end{frame}
 
 \section{Вопросы для самопроверки}
@@ -845,8 +853,8 @@
    \begin{enumerate}
    	\item Что такое \term{признак}?
    	\item Что такое несравнимый (категориальный) признак? Чем он отличается от сравнимого?
-   	\item Что такое булевый признак? Числовой?
-   	\item Приведите пример булевого и несравнимого признака. Болевого и сравнимого. 
+   	\item Что такое булев признак? Числовой?
+   	\item Приведите пример булевого и несравнимого признака. Булевого и сравнимого. 
    	\item Что такое \term{вектор признаков}? Есть два вектора $\bold x_a = (x_1, x_2)$ и $\bold x_b = (x_2, x_1)$.
    	Являются ли они идентичными? Можете привести задачу, когда являются?
    	\item Что такое \term{обучающая выборка}? Почему формула \eqref{eq:def_fit_sample} задаётся
@@ -927,7 +935,7 @@
 	описывающий построение случайного леса
 	\item Объясните, почему RF устойчив к переобучению.
 	\item Объясните, почему RF очень легко реализуем на ПЛИС.
-	\item Пусть есть некий признако $x_i$ принимающий одно из значений: 
+	\item Пусть есть некий признак $x_i$ принимающий одно из значений: 
 	<<русский>>, <<француз>>, <<чукча>>, <<арапеш>>. Как задать функции
 	$r\big(x_i=a\big)$ и $l\big(x_i=a\big)$ ? 
 	\item В RF количество деревьев $N$ -- параметр. 
@@ -935,6 +943,5 @@
 	для любой обучающей выборки.
 	\end{enumerate} 
 \end{frame} 
-  
 
 \end{document}
