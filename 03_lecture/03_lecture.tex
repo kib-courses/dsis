@@ -349,7 +349,7 @@
 
 \begin{frame}{Группа}
 	\termdef{Группа} -- это 
-	\term{ансамбль}
+	\termdef{max-ансамбль}
 	\term{категорий}
 	вида:
 	\begin{equation}\label{eq:group}
@@ -471,10 +471,20 @@
 
 \end{frame}
 
-\begin{frame}{}
-
+\begin{frame}{Risk Engine. Схема}\label{frame:risk_score_sxem}
+	\small
+	Таким образом Risk Engine -- это двуслойный ансамбль. 
+	Внешний слой -- \term{суммирующий ансамбль} (расчёт неприведённого скоринга и функция $M$),
+	внутренние слои -- \term{max-ансамбли} (группы).
+	\begin{center}
+		\includegraphics[width=9cm]{../pic/rsa_risk_score_sxem.png}
+	\end{center}
 \end{frame}
 
+\begin{frame}
+	\Large
+	\auditorium{Кстати, в чем разница между многослойными ансамблями и нейронными сетями?}
+\end{frame}
 
 \begin{frame}{Термины RSA}\label{frame:rsa_risk_engine_terms}
 	\auditorium{Вопрос к залу. Who is who?}
@@ -555,7 +565,7 @@
 		со слайда №\ref{frame:rsa_risk_engine_terms}
 		\item Посмотрите на формулу \eqref{eq:category}. Зачем нужно брать логарифм?
 		Почему бы просто не поделить (умножить) на $coef$?  
-		\item Что будет, если не использовать коэфициент $q$ в формуле \eqref{eq:category} ?
+		\item Что будет, если убрать коэффициент $q$ в формуле \eqref{eq:category} ?
 		\item Если бы $q$ задавали бы формулой:
 		\begin{equation*}
 		q \stackrel{def}{=} \frac{\sum_{\forall bin} \Delta_1(bin)}{\sum_{\forall bin} \Delta_0(bin)}
@@ -563,7 +573,8 @@
 		то как бы изменилась формула \eqref{eq:category}?
 		\item Почему используется функция $max$ для расчёта группы в формуле \eqref{eq:group}?
 		Почему не среднее арифметическое? Почему не $min$?
-		
+		\item Зачем нужна функция $int$ в формуле \eqref{eq:score_preliminary_score}? Что 
+		такое мантисса и порядок? Как числа хранятся в реляционной базе данных?
 		
 	\end{enumerate}
 \end{frame}
@@ -571,15 +582,17 @@
 \begin{frame}{Risk Engine}
 	\small
 	\begin{enumerate}
-		\item[6] Зачем нужны статичные и полустатичные категории? Приведите пример, когда они необходимы.
+		\item[7] Зачем нужны статичные и полустатичные категории? Приведите пример, когда они необходимы.
 		Как вы думаете, в каких типах клиентах больше статичных категорий: в банковских системах для физических лиц, или в банковских системах для юридических лиц? Почему?
-		\item[7] Почему бы формулу \eqref{eq:zero_category} не представить в виде:
+		\item[8] Почему бы формулу \eqref{eq:zero_category} не представить в виде:
 		\begin{equation*}
 		C_0 (bin) \equiv const
 		\end{equation*}
 		Объясните, почему для всех $const \neq 0$, категория $C_0 (bin)$ не имеет практического смысла.
-		\item[8] Зачем нужна функция $int$ в формуле \eqref{eq:score_preliminary_score}? Что 
-		такое мантисса и порядок? Как числа хранятся в реляционной базе данных?
+		\item[9] В Risk Engine используются max-ансамбли, но не используют min-ансамбли. 
+		Связано это с тем, что RSA разрабатывался в 80-е года, ещё до UEBA эпохи. 
+		Можете объяснить, как с помощью UEBA контрибутеров можно создавать min-ансамбли 
+		и как поправить схему на слайде №\ref{frame:risk_score_sxem}?
 	\end{enumerate}
 \end{frame}
 
