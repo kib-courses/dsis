@@ -441,6 +441,37 @@
 \end{frame}
 
 \begin{frame}{Неприведённый скоринг в RSA}
+	После расчёта всех групп $G_i ( \bold x )$: 
+	\begin{equation}
+	preliminary\_score(\bold x) \stackrel{def}{=} \sum_{i=1}^{m} G_i \big( \bold x \big)
+	\end{equation}
+\end{frame}
+
+\begin{frame}\label{frame:table_normalization}
+	\begin{center}
+		\includegraphics[width=11.5cm]{../pic/rsa_preliminary_score_normalization.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Приведение скоринга. Функция $M$}
+	Функция $M$ задаётся на основе \termdef{таблицы нормализации} (см.предыдущий слайд).
+	Все промежуточные значения скоринга вычисляются \term{линейной интерполяцией}.
+	
+	\begin{block}{Замечание}
+		Настоящая таблица нормализации задаётся с шагом 10, а не 100. 
+		То что на слайде №\ref{frame:table_normalization} -- это из маркетинговых материалов.
+		Особенно важны шаги в диапазонах от 950 до 1000.
+	\end{block} 
+	
+	\auditorium{В чем достоинства и недостатки подобного подхода нормализации?
+	Верно ли, что всегда будут транзакции с высоким скорингом? 
+	Верно ли что при <<пожарах>> потребуется уменьшать границы сработок большинства
+	правил Rules Engine?
+	}
+
+\end{frame}
+
+\begin{frame}{}
 
 \end{frame}
 
@@ -450,7 +481,9 @@
 	\begin{enumerate}
 		\item Разбиновка 
 		\item Категория. $R^1$, $R^2$, $R^3$, $R^4$ категории
-	
+		\item Группа
+		\item Неприведённый скоринг
+		\item Скоринг
 	\end{enumerate}
 \end{frame}
 
