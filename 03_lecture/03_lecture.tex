@@ -259,8 +259,9 @@
 \section{RSA Risk Engne}
 
 \begin{frame}
-	\begin{block}
-		
+	\begin{block}{Замечание}
+	Описание Risk Engne актуально на 2015 год. Возможно многие моменты изменились 
+	(вряд ли, т.к. это жёстокий энтерпрайз)
 	\end{block}
 \end{frame}
 
@@ -296,20 +297,73 @@
 	\auditorium{Какова сложность алгоритма для $R^n$? Почему в RSA не используют контрибутеры сложности более чем 4?}
 \end{frame}
 
-\begin{frame}{Разбиновка контрибутеров}
-	В дальнейшем происходит разбиновка котрибутеров. 
-	Она осуществляется \term{скользящим окном}.
+\begin{frame}{Категория}
+	\footnotesize
+	Процедура разбиновки осуществляется либо единожды, либо при каждом повторном обучении,
+	в зависимости от настроек, вручную заданные экспертом.
 	
-	Эта процедура осуществляется единожды на множестве многих заказчиков <<полуручным>>
-	способом и не меняется годами.
+	\termdef{Категория} -- это функция скоринга контрибьютера в диапазоне $[- C_{MAX}, + C_{MAX}]$. 
+	Эта величина рассчитывается в каждом бине ($bin$) через \term{Индексы Джини}:
+	\begin{equation}\label{eq:category}
+	C(bin) \stackrel{def}{=} log_{coef} \frac{q \cdot \Delta_1 (bin)}{\Delta_0 (bin)}
+	\end{equation}
+	
+	Где коэффициент $coef$ задаётся экспертом вручную.
+	
+	Величина $q$ -- это величина, показывающая во сколько раз \textbf{во всех бинах} данных легитимных транзакций
+	 больше данных мошеннических транзакций:
+	\begin{equation}
+	q \stackrel{def}{=} \frac{\sum_{\forall bin} \Delta_0(bin)}{\sum_{\forall bin} \Delta_1(bin)}
+	\end{equation}
 \end{frame}
+
+\begin{frame}{Категория}
+	\small
+	Физический смысл категории в том, что если $C(bin)=0$, то данный бин не репрезентативный.
+	
+	Если $C(a)>0$, то $a$ скорее более мошеннический бин, чем легитимный.
+	
+	Если $C(b)<0$, то $b$ скорее более легитимный бин, чем мошеннический.
+	
+	Формула \eqref{eq:category} дополняется следующими условиями:
+	\begin{enumerate}
+		\item Если данных в бине мало, то $C(bin) := 0$.
+		\item Если $\Delta_0 (bin) = 0$, то $C(bin) := C_{MAX} $,
+		\item Если $\Delta_1 (bin) = 0$, то $C(bin) := -C_{MAX} $
+		\item Если значение выходит за рамки $[-C_{MAX}, + C_{MAX}]$
+		то присваивается минимально возможное / максимально возможное  значение: $-C_{MAX}$, $C_{MAX}$.
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Проблема <<скачков>> у функции логарифма}
+	Так как у функции логарифма есть скачки возле нуля, то вводят \term{монотонно не убывающую} функцию $F$. Переопределим рассчёт категории:
+	\begin{equation}
+	C(bin) \stackrel{def}{=} F \left( log_{coef} \frac{q \cdot \Delta_1 (bin)}{\Delta_0 (bin)} \right)
+	\end{equation}
+	
+	Что из себя представляет функция $F$ является <<коммерческой тайной RSA>>, 
+	но во-первых можно догадатся, во-вторых можно проверить свою догадку, имея доступ к СУБД.
+	
+	\auditorium{Ваши предположения?}
+\end{frame}
+
+\begin{frame}{Группа}
+	\termdef{Группа} -- это 
+	\term{ансамбль}
+	\term{категорий}
+	вида:
+	\begin{equation}
+	
+	\end{equation}
+\end{frame}
+
 
 \begin{frame}{Термины RSA}\label{frame:rsa_risk_engine_terms}
 	\auditorium{Вопрос к залу. Who is who?}
 	\begin{enumerate}
 		\item Разбиновка 
 		\item Категория. $R^1$, $R^2$, $R^3$, $R^4$ категории
-		\item 		
+	
 	\end{enumerate}
 \end{frame}
 
@@ -374,10 +428,21 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-	\Large
-	Ответьте на вопросы о терминологии \mbox{Risk Engine}
-	со слайда №\ref{frame:rsa_risk_engine_terms}
+\begin{frame}{Risk Engine}
+	\begin{enumerate}
+		\item 	Ответьте на вопросы о терминологии \mbox{Risk Engine}
+		со слайда №\ref{frame:rsa_risk_engine_terms}
+		\item Посмотрите на формулу \eqref{eq:category}. Зачем нужно брать логарифм?
+		Почему бы просто не поделить (умножить) на $coef$?  
+		\item Что будет, если не использовать коэфициент $q$ в формуле \eqref{eq:category} ?
+		\item Если бы $q$ задавали бы формулой:
+		\begin{equation*}
+		q \stackrel{def}{=} \frac{\sum_{\forall bin} \Delta_1(bin)}{\sum_{\forall bin} \Delta_0(bin)}
+		\end{equation*}
+		то как бы изменилась формула \eqref{eq:category}?
+	\end{enumerate}
 \end{frame}
+
+
 
 \end{document}
