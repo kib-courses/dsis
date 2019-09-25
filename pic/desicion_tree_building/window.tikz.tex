@@ -1,0 +1,28 @@
+\input{./../pic/desicion_tree_building/1.tikz.tex}
+
+\tikzstyle{outlier}=[circle,thick,draw=black,thick, dotted,minimum size=8mm]
+
+\draw [thick, dotted] (0.5,0) -- (0.5,2.5);
+\draw [thick, dotted] (1,0) -- (1,2.5);
+\draw [thick, dotted] (1.5,0) -- (1.5,2.5);
+
+\draw [thick, loosely dotted] (2-0.015,0) -- (2-0.015,2.5);
+\draw [thick, loosely dotted] (2+0.015,0) -- (2+0.015,2.5);
+
+\draw [thick, dotted] (2.5,0) -- (2.5,2.5);
+
+\draw [thick, loosely dotted] (3-0.015,0) -- (3-0.015,2.5);
+\draw [thick, loosely dotted] (3+0.015,0) -- (3+0.015,2.5);
+
+\draw [thick, dotted] (3.5,0) -- (3.5,2.5);
+
+
+\node at (0.0,-0.2) {$a_1$};
+\node at (0.5,-0.2) {$a_2$};
+\node at (1.0,-0.2) {$a_3$};
+\node at (1.5,-0.2) {$a_4$};
+\node [outlier] at (2.0,-0.2) {$a_5$};
+\node at (2.5,-0.2) {$a_6$};
+\node [outlier] at (3.0,-0.2) {$a_7$};
+\node at (3.5,-0.2) {$a_8$};
+
