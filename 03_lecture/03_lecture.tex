@@ -16,6 +16,8 @@
     \begin{enumerate}
 		\item \nameref{section:feedback}
 		\item \nameref{section:rsa_feedback}
+		\item \nameref{section:risk_engine}
+		\item \nameref{section:rules_engine}
 	\end{enumerate}
 \end{frame}
 
@@ -138,7 +140,7 @@
 \end{frame}
 
 
-\section{RSA. Обратная связь}\label{section:rsa_feedback}
+\section{Обратная связь в RSA}\label{section:rsa_feedback}
 
 \begin{frame}{Общая схема} 
 	\includegraphics[width=11.5cm]{../pic/expert_system_rsa.png}
@@ -146,11 +148,22 @@
 \end{frame}
 
 \begin{frame}{Последовательность}
-	% TODO заполнить последовательность действий
+	
+	Построение:
 	\begin{enumerate}
 		\item Выбираются данные за $T=90$ дней.
 		% \item Выбираются <<фиксированные>> данные.
-		\item Строится 
+		\item Строится оценщик (Risk Engine)
+		\item Анализируется мошенничество заказчика и создаются правила
+	\end{enumerate}
+
+	Эксплуатация:
+	\begin{enumerate}
+		\item Расчёт вектора признаков $\bold x$
+		\item Risk Engine
+			\item 
+		\item Rules Engine
+		\item Процессинг системы
 	\end{enumerate}
 
 \end{frame}
@@ -220,7 +233,7 @@
 	\includegraphics[width=11.5cm]{../pic/ai2_second.png}
 \end{frame}
 
-\section{RSA Rules Engine}
+\section{RSA Rules Engine}\label{section:rules_engine}
 
 \begin{frame}{Risk Engine \& Rules Engine}
 	\begin{itemize}
@@ -256,7 +269,7 @@
 \end{frame}
 
 
-\section{RSA Risk Engne}
+\section{RSA Risk Engne}\label{section:risk_engine}
 
 \begin{frame}
 	\begin{block}{Замечание}
