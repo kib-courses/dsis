@@ -16,6 +16,8 @@
     \begin{enumerate}
 		\item \nameref{section:feedback}
 		\item \nameref{section:rsa_feedback}
+		\item \nameref{section:risk_engine}
+		\item \nameref{section:rules_engine}
 	\end{enumerate}
 \end{frame}
 
@@ -138,7 +140,7 @@
 \end{frame}
 
 
-\section{RSA. Обратная связь}\label{section:rsa_feedback}
+\section{Обратная связь в RSA}\label{section:rsa_feedback}
 
 \begin{frame}{Общая схема} 
 	\includegraphics[width=11.5cm]{../pic/expert_system_rsa.png}
@@ -147,10 +149,21 @@
 
 \begin{frame}{Последовательность}
 	
+	Построение:
 	\begin{enumerate}
 		\item Выбираются данные за $T=90$ дней.
 		% \item Выбираются <<фиксированные>> данные.
-		\item Строится 
+		\item Строится оценщик (Risk Engine)
+		\item Анализируется мошенничество заказчика и создаются правила
+	\end{enumerate}
+
+	Эксплуатация:
+	\begin{enumerate}
+		\item Расчёт вектора признаков $\bold x$
+		\item Risk Engine
+			\item 
+		\item Rules Engine
+		\item Процессинг системы
 	\end{enumerate}
 
 \end{frame}
@@ -220,7 +233,7 @@
 	\includegraphics[width=11.5cm]{../pic/ai2_second.png}
 \end{frame}
 
-\section{RSA Rules Engine}
+\section{RSA Rules Engine}\label{section:rules_engine}
 
 \begin{frame}{Risk Engine \& Rules Engine}
 	\begin{itemize}
@@ -244,19 +257,257 @@
 	\begin{block}{Замечание}
 		Для заказчика Risk Engine -- это чёрный ящик,
 		он не вмешивается в его работу. 
-		Risk Engine даётся as is, 
+		Risk Engine даётся <<as is>>, 
 		или для крупных заказчиков настраивается отдельно.
 	\end{block}
+	\small
+	Маркетинговая информация: \url{https://www.emc.com/collateral/hardware/h9096-rsa-risk-engine-sb-11-2.pdf}
 \end{frame}
-
-\begin{frame}
-\end{frame}
-
-
-\section{RSA Risk Engne}
 
 \begin{frame}
 	
+\end{frame}
+
+
+\section{RSA Risk Engne}\label{section:risk_engine}
+
+\begin{frame}
+	\begin{block}{Замечание}
+	Описание Risk Engne актуально на 2015 год. Возможно многие моменты изменились 
+	(вряд ли, т.к. это жёстокий энтерпрайз)
+	\end{block}
+\end{frame}
+
+
+\begin{frame}{Контрибуторы}
+	Все признаки разбиваются на 
+	\termdef{контрибуторы}\footnote{\termdef{Контрибутор} (контрибьютер) -- это совокупность признаков (возможно один),
+	который вносит определённый вклад в скоринговую модель. См. лекцию №2}
+	по 1, 2, 3 или 4 признака, но не более. 
+	
+	Таким образом имеем $R^1$, $R^2$, $R^3$ или $R^4$ \term{пространство признаков}.
+	
+	Контрибуторы $R^n$, где $n>4$ не используются.	
+\end{frame}
+
+\begin{frame}{Скользящее окно. Разбиновка.}
+	\footnotesize
+	Определяем окно $\Delta_i$ для каждого $x_i$ признака 
+	\term{контрибутора} 
+	$(x_1, .., x_n)$
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+			\input{./../pic/desicion_tree_building/window.tikz.tex}
+		\end{tikzpicture}
+	\end{center}
+	Определяем оптимальные бины (c помощью Индекса Джини).
+	Они определяются либо в рамках отрасли (все банки), либо в рамках заказчика.
+	Это -- экспертное решение DS-специалиста в рамках каждого \term{контрибутера}.
+\end{frame}
+
+\begin{frame}
+	\Large
+	\auditorium{Какова сложность алгоритма для $R^n$? Почему в RSA не используют контрибутеры сложности более чем 4?}
+\end{frame}
+
+\begin{frame}{Категория}
+	\footnotesize
+	Процедура разбиновки осуществляется либо единожды, либо при каждом повторном обучении,
+	в зависимости от настроек, вручную заданные экспертом.
+	
+	\termdef{Категория} -- это функция скоринга контрибьютера в диапазоне $[- C_{MAX}, + C_{MAX}]$. 
+	Эта величина рассчитывается в каждом бине ($bin$) через \term{Индексы Джини}:
+	\begin{equation}\label{eq:category}
+	C(bin) \stackrel{def}{=} log_{coef} \frac{q \cdot \Delta_1 (bin)}{\Delta_0 (bin)}
+	\end{equation}
+	
+	Где коэффициент $coef$ задаётся экспертом вручную.
+	
+	Величина $q$ -- это величина, показывающая во сколько раз \textbf{во всех бинах} данных легитимных транзакций
+	 больше данных мошеннических транзакций:
+	\begin{equation}
+	q \stackrel{def}{=} \frac{\sum_{\forall bin} \Delta_0(bin)}{\sum_{\forall bin} \Delta_1(bin)}
+	\end{equation}
+\end{frame}
+
+\begin{frame}{Категория}
+	\small
+	Физический смысл категории в том, что если $C(bin)=0$, то данный бин не репрезентативный.
+	
+	Если $C(a)>0$, то $a$ скорее более мошеннический бин, чем легитимный.
+	
+	Если $C(b)<0$, то $b$ скорее более легитимный бин, чем мошеннический.
+	
+	Формула \eqref{eq:category} дополняется следующими условиями:
+	\begin{enumerate}
+		\item Если данных в бине мало, то $C(bin) := 0$.
+		\item Если $\Delta_0 (bin) = 0$, то $C(bin) := C_{MAX} $,
+		\item Если $\Delta_1 (bin) = 0$, то $C(bin) := -C_{MAX} $
+		\item Если значение выходит за рамки $[-C_{MAX}, + C_{MAX}]$
+		то присваивается минимально возможное / максимально возможное  значение: $-C_{MAX}$, $C_{MAX}$.
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Проблема <<скачков>> у функции логарифма}
+	Так как у функции логарифма есть скачки возле нуля, то вводят \term{монотонно не убывающую} функцию $F$. Переопределим рассчёт категории:
+	\begin{equation}
+	C(bin) \stackrel{def}{=} F \left( log_{coef} \frac{q \cdot \Delta_1 (bin)}{\Delta_0 (bin)} \right)
+	\end{equation}
+	
+	Что из себя представляет функция $F$ является <<коммерческой тайной RSA>>, 
+	но во-первых можно догадатся, во-вторых можно проверить свою догадку, имея доступ к СУБД.
+	
+	\auditorium{Ваши предположения?}
+\end{frame}
+
+\begin{frame}{Группа}
+	\termdef{Группа} -- это 
+	\termdef{max-ансамбль}
+	\term{категорий}
+	вида:
+	\begin{equation}\label{eq:group}
+		G_i (bin) \stackrel{def}{=} max \big( C_{i_1}(bin), ..., C_{i_m}(bin) \big)
+	\end{equation}
+	
+	Группа может состоять из одной категории:
+	\begin{equation*}
+	G_i (bin) = max \big( C_{i}(bin) \big) \equiv C_{i}(bin)
+	\end{equation*}
+	
+	Группы собираются из категорий вручную на основе того или иного кейса мошенничества
+	и на основании здравого смысла.
+	
+	Появляется новый кейс мошенничества -- следовательно появтяется одна (или более) новая группа.
+\end{frame}
+
+\begin{frame}{Статичные категории}
+	Существуют кейсы мошенничества, которые происходят крайне редко. Либо которые происходят в одном банке и ещё <<не дошли>> до банков поменьше. 
+	
+	Таким образом обучающая выборка мошенничества может выйти за пределы окны $T=90$. 
+	
+	\auditorium{Что делать?}
+\end{frame}
+
+\begin{frame}{Статичные категории}
+	\small
+	Существуют кейсы мошенничества, которые происходят крайне редко. Либо которые происходят в одном банке и ещё <<не дошли>> до банков поменьше. 
+	
+	Таким образом обучающая выборка мошенничества может выйти за пределы окны $T=90$. 
+	
+	Для решения этой проблемы задаются \termdef{статичные и полустатичные категории}.
+	
+	Статичная категория рассчитывается на определённой выборке и фиксируется в системе 
+	(не пересчитывается при повторном обучении системы).
+	
+	Полустатичная категория использует статичные данные мошенничества, но свежие данные
+	легитимных операций при расчёте категории.
+\end{frame}
+
+\begin{frame}{Обнуляющая категория}
+	Если мы хотим взвесить определённый риск и добавить группу, которая не уменьшит скоринг системы, 
+	мы можем в группу добавить обнуляющую категорию:
+	\begin{equation}\label{eq:zero_category}
+	C_0 (bin) \equiv 0
+	\end{equation}
+	Тогда группа никогда не будет уменьшать скоринг. Она либо его увеличит, либо оставит без изменений.
+	
+	\auditorium{Приведите пример кейса мошенничества, в котором разумно использовать обнуляющую категорию?}
+	
+	\auditorium{Как обнуляющая категория связана со статическими и полустатическими категориями?}
+	
+\end{frame}
+
+
+\begin{frame}{Неприведённый скоринг (Preliminary score)}
+	\termdef{Неприведённый скоринг} (предварительный/ая скоринг/оценка, preliminary score)
+	вектора признаков $\bold x$ -- это функция, возвращающая число в диапазоне $(- \infty, + \infty)$, которое с помощью 
+	какой-либо \term{монотонно не убывающей} функции $M$
+	можно привести к \term{отклику} (\term{априорной вероятности} мошенничества) $p$
+	
+	\begin{equation*}
+	preliminary\_score(\bold x) \in (- \infty, + \infty)
+	\end{equation*}
+	\begin{equation}
+	score(\bold x) = M \big( preliminary\_score(\bold x) \big) = p \in [0, 1]
+	\end{equation}
+	Иногда для удобства скоринг вычисляют умножением на 1000:
+	\begin{equation}\label{eq:score_preliminary_score}
+	score(\bold x) = int \Big( 1000 \cdot M \big( preliminary\_score(\bold x) \big) \Big) = s \in [0, 1000]
+	\end{equation}	
+\end{frame}
+
+\begin{frame}{Неприведённый скоринг (Preliminary score)}
+	Неприведённый скоринг очень часто используют в 
+	\termdef{суммирующих ансамблях}:
+	\begin{equation}
+	preliminary\_score(\bold x) \stackrel{def}{=} \sum_{i=1}^{m} w_i \cdot score_i (\bold x)
+	\end{equation}
+	где функция $score_i (\bold x)$ возвращает значение не в диапазоне $[0, 1]$,
+	а в диапазоне $[-1, 1]$.
+
+	$w_i$ -- весовые коэфициенты. 
+	
+	Иногда вместо весовых коэфициентов используют монотонно-неубывающие функции $W_i$:
+	\begin{equation}
+	preliminary\_score(\bold x) \stackrel{def}{=} \sum_{i=1}^{m} W_i \big( score_i (\bold x) \big)
+	\end{equation}
+\end{frame}
+
+\begin{frame}{Неприведённый скоринг в RSA}
+	После расчёта всех групп $G_i ( \bold x )$: 
+	\begin{equation}
+	preliminary\_score(\bold x) \stackrel{def}{=} \sum_{i=1}^{m} G_i \big( \bold x \big)
+	\end{equation}
+\end{frame}
+
+\begin{frame}\label{frame:table_normalization}
+	\begin{center}
+		\includegraphics[width=11.5cm]{../pic/rsa_preliminary_score_normalization.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Приведение скоринга. Функция $M$}
+	Функция $M$ задаётся на основе \termdef{таблицы нормализации} (см.предыдущий слайд).
+	Все промежуточные значения скоринга вычисляются \term{линейной интерполяцией}.
+	
+	\begin{block}{Замечание}
+		Настоящая таблица нормализации задаётся с шагом 10, а не 100. 
+		То что на слайде №\ref{frame:table_normalization} -- это из маркетинговых материалов.
+		Особенно важны шаги в диапазонах от 950 до 1000.
+	\end{block} 
+	
+	\auditorium{В чем достоинства и недостатки подобного подхода нормализации?
+	Верно ли, что всегда будут транзакции с высоким скорингом? 
+	Верно ли что при <<пожарах>> потребуется уменьшать границы сработок большинства
+	правил Rules Engine?
+	}
+
+\end{frame}
+
+\begin{frame}{Risk Engine. Схема}\label{frame:risk_score_sxem}
+	\small
+	Таким образом Risk Engine -- это двуслойный ансамбль. 
+	Внешний слой -- \term{суммирующий ансамбль} (расчёт неприведённого скоринга и функция $M$),
+	внутренние слои -- \term{max-ансамбли} (группы).
+	\begin{center}
+		\includegraphics[width=9cm]{../pic/rsa_risk_score_sxem.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\Large
+	\auditorium{Кстати, в чем разница между многослойными ансамблями и нейронными сетями?}
+\end{frame}
+
+\begin{frame}{Термины RSA}\label{frame:rsa_risk_engine_terms}
+	\auditorium{Вопрос к залу. Who is who?}
+	\begin{enumerate}
+		\item Разбиновка 
+		\item Категория. $R^1$, $R^2$, $R^3$, $R^4$ категории
+		\item Группа
+		\item Неприведённый скоринг
+		\item Скоринг
+	\end{enumerate}
 \end{frame}
 
 
@@ -282,10 +533,10 @@
 	\begin{enumerate}
 		\item В <<цепочке>> (см. слайд №\ref{frame:chain_score}) задана функция
 		$\bold score$ с коэффициентами $(0.1, 0.2, 0.7)$. Каков будет скоринг, 
-		если $score_1=540$, $score_2=546$, $dscore_3=584$?
+		если $score_1=540$, $score_2=546$, $score_3=584$?
 		\item В <<цепочке>> задана функция 	$\bold score$ 
 		с коэффициентами $(0.2, 0.4, 0.8)$. Значения $score_1, score_2, score_3$
-		равны $345$, $124$ и $573$. Почему $\bold score$ 
+		равны $345$, $124$ и $573$. Почему $\bold {score}$ 
 		будет $412$, 
 		а не $577$ ?
 		\item Предположим, что $score_{i+1}$ 
@@ -319,5 +570,46 @@
 	легитимными в обучающей выборке?
 \end{itemize}
 \end{frame}
+
+\begin{frame}{Risk Engine}
+	\small
+	\begin{enumerate}
+		\item 	Ответьте на вопросы о терминологии \mbox{Risk Engine}
+		со слайда №\ref{frame:rsa_risk_engine_terms}
+		\item Посмотрите на формулу \eqref{eq:category}. Зачем нужно брать логарифм?
+		Почему бы просто не поделить (умножить) на $coef$?  
+		\item Что будет, если убрать коэффициент $q$ в формуле \eqref{eq:category} ?
+		\item Если бы $q$ задавали бы формулой:
+		\begin{equation*}
+		q \stackrel{def}{=} \frac{\sum_{\forall bin} \Delta_1(bin)}{\sum_{\forall bin} \Delta_0(bin)}
+		\end{equation*}
+		то как бы изменилась формула \eqref{eq:category}?
+		\item Почему используется функция $max$ для расчёта группы в формуле \eqref{eq:group}?
+		Почему не среднее арифметическое? Почему не $min$?
+		\item Зачем нужна функция $int$ в формуле \eqref{eq:score_preliminary_score}? Что 
+		такое мантисса и порядок? Как числа хранятся в реляционной базе данных?
+		
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Risk Engine}
+	\small
+	\begin{enumerate}
+		\item[7] Зачем нужны статичные и полустатичные категории? Приведите пример, когда они необходимы.
+		Как вы думаете, в каких типах клиентах больше статичных категорий: в банковских системах для физических лиц, или в банковских системах для юридических лиц? Почему?
+		\item[8] Почему бы формулу \eqref{eq:zero_category} не представить в виде:
+		\begin{equation*}
+		C_0 (bin) \equiv const
+		\end{equation*}
+		Объясните, почему для всех $const \neq 0$, категория $C_0 (bin)$ не имеет практического смысла.
+		\item[9] В Risk Engine используются max-ансамбли, но не используют min-ансамбли. 
+		Связано это с тем, что RSA разрабатывался в 80-е года, ещё до UEBA эпохи. 
+		Можете объяснить, как с помощью UEBA контрибутеров можно создавать min-ансамбли 
+		и как поправить схему на слайде №\ref{frame:risk_score_sxem}?
+	\end{enumerate}
+\end{frame}
+
+
+
 
 \end{document}
