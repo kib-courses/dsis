@@ -16,13 +16,149 @@
 \begin{frame}{План лекции}
     \begin{enumerate}
     	\item \nameref{section:ueba}
-		\item \nameref{section:mca}
+    	\item \nameref{section:mca}
 		\item \nameref{section:mea}
 		\item \nameref{section:ueba_other}
 	\end{enumerate}
 \end{frame}
 
 \section{UEBA}\label{section:ueba}
+	\begin{center}
+		\includegraphics[width=7cm]{../pic/Jackie_Chan.png}
+		
+		\LARGE
+		\auditorium{UEBA?}
+	\end{center}
+
+\begin{frame}{User and Entity Behavioral Analitics}
+
+	\termdef{Потоковые данные} (stream data) -- 
+	<<локально связные данные>> пользовательской активности
+	(трек мыши, последовательность действий, keystroke dynamics и т.д.)
+	
+	\begin{equation*}
+	track~data \subseteq stream~data \subseteq raw~data
+	\end{equation*}
+	
+	\termdef{Поведенческая аналитика}, User and Entity Behavioral Analitics (UEBA) --
+	процесс сбора, ручного анализа и построения экспертных систем
+	основанных на больших объёмов \term{потоковых данных}, генерируемые пользовательскими приложениями
+\end{frame}
+
+\begin{frame}{Примеры UEBA в ИБ}
+	\begin{enumerate}
+		\item MTA (Mouse Track Analysis) --
+		анализ трека мыши.
+		Например на Web-портале (в частности ДБО).
+		\item keystroke dynamics --
+		анализ клавиатурного почерка.
+		Например при вводе логина и пароля в ДБО.
+		\item predilections (предпочтения) --
+		предпочтения пользователя. 
+		Например как копирует информацию: ctrl+v, shift+insert или кнопка мыши + "вставить"?
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Определение точности для задачи идентификации}
+	\small
+	Пусть имеется множество классов (не обязательно два): $1, 2, 3, ..., n$.
+	
+	Введём события:
+	\begin{itemize}
+		\item $L_r^i$ -- событие, что объект действительно пренадлежит классу $i$;
+		\item $L_s^i$ -- событие, что экспертная система определила событие к классу $i$.
+	\end{itemize}
+	
+	Тогда \termdef{точность обнаружения своих для класса $i$} ($T$)
+	% и \termdef{полнота обнаружения для класса $i$} ($\Pi$)
+	определяется по формуле:
+	\begin{equation}
+	\hat T_i \stackrel{def}{=} P (L_r^i | L_s^i)
+	\end{equation}
+	% \begin{equation}
+	% \Pi_i \stackrel{def}{=} P (L_s^i | L_r^i)
+	% \end{equation}
+\end{frame}
+
+\begin{frame}
+	\small
+	Определим операцию $[cond]$: 
+	\begin{itemize}
+		\item $[cond]=1$ если $cond$ истинно 
+		\item $[cond]=0$, если $cond$ ложно
+	\end{itemize}
+	
+	определим величину $refusal \in [0, 1]$.
+	
+	Будем считать, что $n >> 0$.
+	
+	Тогда \termdef{точность обнаружения своих} при отказе $refusal$ это такая максимально
+	возможная величина $\hat T$, что выполняется уравнение:
+	\begin{equation}
+	\frac{\sum_{i=1}^{n}[\hat T_i > 
+		\hat T]}{n} \geqslant 1 -  refusal
+	\end{equation}
+\end{frame}
+
+\begin{frame}
+	\Large
+	На практике интересны системы. для которых 
+	\term{точность для своих} $ \approx 99.9...9\%$.
+	
+	\begin{center}
+		\auditorium{Почему?}
+	\end{center}
+	Таким образом важным параметром является величина отказа
+	(величина $refusal$)
+	
+	Таким образом разумно зафиксировать 
+	$ \hat T = 99.9...9\%$ и уже \textbf{после}
+	подбирать $refusal$.
+	
+	\auditorium{Объясните физический смысл значения refusal в этом случае.}
+\end{frame}
+
+\begin{frame}{Точность [определения чужих]}
+	\small
+	Предположим, что в некоторой системе под учётной записью 
+	работает \termdef{другой} человек.
+	Не факт, что это фрод (событие F -- fraud).
+	
+	Обозначим его через букву $A$ (от англ \textbf{another} или \textbf{anomaly})
+	
+	Введём ещё два события:
+	\begin{itemize}
+		\item $A_r^i$ (another) -- событие, что в действительности под учётной записью $i$
+		работает пользователь $\neq i$;
+		\item $A_s^i$ (anomaly)-- событие, что экспертная система определила событие
+		как аномальное для пользователя $i$
+	\end{itemize}
+
+	Тогда \termdef{точность [для определения чужих]}	
+	для пользователя $i$	
+
+	\begin{equation}
+	\hat T_i \stackrel{def}{=} P (A_r^i | A_s^i)
+	\end{equation}
+	
+\end{frame}
+
+
+\begin{frame}{Фундаментальная проблема всех UEBA решений}
+	\begin{block}{Очень важное замечание.}
+		Обычно \href{https\%3A\%2F\%2Fru.wikipedia.org\%2Fwiki\%2F\%D0\%9F\%D1\%80\%D0\%BE\%D0\%BA\%D0\%BB\%D1\%8F\%D1\%82\%D0\%B8\%D0\%B5_\%D1\%80\%D0\%B0\%D0\%B7\%D0\%BC\%D0\%B5\%D1\%80\%D0\%BD\%D0\%BE\%D1\%81\%D1\%82\%D0\%B8}{Проклятье Размерности (ПР)}
+		рассматривают проблему количества признаков в Data Science.
+		
+		Однако частный случай ПР -- это большое количество \term{классов}.
+		Многие задачи тривиально решаются при малом количестве классов, 
+		но полнота и точность падают к 0\% при существенном увеличении количества классов.
+		
+		Не обольщайтесь на академические работы!
+	\end{block}
+
+
+\end{frame}
+
 
 \section{Mouse Track Analysis}\label{section:mca}
 
