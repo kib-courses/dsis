@@ -16,7 +16,7 @@
 \begin{frame}{План лекции}
     \begin{enumerate}
     	\item \nameref{section:fe}
-		\item \nameref{section:text_tasks}
+		\item \nameref{section:neneural_network}
 		\item \nameref{section:texts_fe}
 	\end{enumerate}
 \end{frame}
@@ -60,6 +60,11 @@
 		\item Feature Transformation 
 		\item Feature Selection
 	\end{enumerate}
+	
+	\begin{block}{Замечание}
+	Иногда под \term{Feature Extraction}
+	подразумевают только \term{Feature Selection}.
+	\end{block}
 \end{frame}
 
 \begin{frame}{Raw Data}
@@ -80,6 +85,9 @@
 	как пару сигналов от времени: $x(t)$, $y(t)$ и как частный случай
 	UEBA данных.
 \end{frame}
+
+\section{Несколько замечаний о нейронных сетях}\label{section:neneural_network}
+
 
 \begin{frame}{Решающее дерево и решающий пень}
 	\termdef{Решающий пень} -- это 
@@ -161,7 +169,9 @@
 	\end{block}
 \end{frame}
 
-\section{Задачи ИБ в текстах}\label{section:text_tasks}
+
+\section{Feature Extraction в текстовых данных}\label{section:texts_fe}
+
 
 \begin{frame}{Тексты и ИБ}
 	Текстовая информация повсюду. 
@@ -176,11 +186,79 @@
 	Текстовая информация повсюду. 
 	И может использоваться для ИБ задач
 	\begin{enumerate}
-		\item 
+		\item Противодействие пиратству: описание фильмов
+		\item Антиконтрафакт: описание продукции
+		\item Даркнет: описание услуги/ВПО
+		\item Фрод-мониторинг: СМС, назначение платежа, комментарий
+		\item Анализ Трафик -- иногда его можно эффективно интерпретировать как текст
 	\end{enumerate}
 \end{frame}
 
-\section{Feature Extraction в текстовых данных}\label{section:texts_fe}
+\begin{frame}[fragile]{BoW}
+	\termdef{BoW} (bag of words) -- множество с повторением, 
+	основанное на тексте.
+	
+	Обычно BoW представляют в виде словаря вида:
+	\begin{center}
+		\texttt{\{"word": count\}}
+	\end{center}
+		
+	Обычно процесс формирования BoW такой:
+	\begin{enumerate}
+		\item Поиск ресурса и получение документа (например HTML)
+
+		\item Извлечение текста из документа
+		\item Разбиение текста на \termdef{токены}. 
+		Нормализация (Например \href{https://yandex.ru/dev/mystem/}{MyStem})
+		\item Построение словаря: \href{https://docs.python.org/3/library/collections.html\#collections.Counter}{collectios.Counter}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Что есть токен?}
+	Самый простой способ задать токен -- это разбить на слова. 
+	
+	Но есть нюансы. Например единые понятия, состоящие из нескольких слов:
+	<<морской огурец>>, <<цветная капуста>> и т.д.
+	
+	Так же есть языки, в которых не используются пробелы (китайский). 
+	При этом само слово может состоять из многих графем. 
+	(tǔ -- земля, dòu -- горох, tǔdòu -- картофель)
+	
+	\begin{block}{Замечание}
+		Существуют задачи, в которых токенизация не является примитивной задачей
+	\end{block}
+\end{frame}
+
+\begin{frame}{Нормализация токенов}
+	Все токены следует нормализировать, привести к одной форме. 
+	(для существительных -- единственное число, именительный падеж;
+	для глаголов -- инфинитив и т.д.)
+	
+ 	Бывают омонимы. Например "печь" -- это существительное или глагол?
+	"мой" -- это от "мыть" или это местоимение?
+	
+	Будем считать омонимы -- \term{выбросами}.
+\end{frame}
+
+\begin{frame}{Кривая Ципфа (Zipf) и закон Ципфа} 
+	Возьмём очень большой корпус текста
+	(Например все произведения Дарьи Донцовой)
+
+	По оси $x$ отложим \termdef{шкалу порядка} слова.
+	То есть упорядочим слова от самого употребляемого к самому неупотребительному.
+	
+\end{frame}
+
+\begin{frame}{Простой алгороритм на основе BoW}
+	
+\end{frame}
+
+\begin{frame}{Инструменты для работы с текстами}
+	\begin{enumerate}
+		\item
+	\end{enumerate}
+
+\end{frame}
 
 
 \section{Вопросы для самопроверки}
