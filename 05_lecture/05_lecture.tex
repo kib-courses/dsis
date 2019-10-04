@@ -17,7 +17,9 @@
     \begin{enumerate}
     	\item \nameref{section:fe}
 		\item \nameref{section:neneural_network}
-		\item \nameref{section:texts_fe}
+		\item \nameref{section:texts_fe1}
+		\item \nameref{section:APTA}
+		\item \nameref{section:texts_fe2}
 	\end{enumerate}
 \end{frame}
 
@@ -170,7 +172,7 @@
 \end{frame}
 
 
-\section{Feature Extraction в текстовых данных}\label{section:texts_fe}
+\section{Feature Extraction в текстовых данных (Часть 1)}\label{section:texts_fe1}
 
 
 \begin{frame}{Тексты и ИБ}
@@ -262,12 +264,22 @@
 	\includegraphics[width=11.5cm]{../pic/zipf_curve.png}
 \end{frame}
 
-\begin{frame}{Алгоритм GIB AntiPiracy}
-	Дать описание о чём это и где используется 
-	% TODO описание
+
+\section{Алгоритм APTA}\label{section:APTA}
+
+
+\begin{frame}{Алгоритм APTA}
+	\termdef{APTA (AntiPiracy Text Analizer)} -- 
+	очень простой и эффективный алгоритм, работающий
+	в продукте \href{https://www.group-ib.ru/antipiracy.html}{Group-IB AntiPiracy}.
+	
+	\begin{block}{Замечание}
+	Помимо APTA используется алгоритм APVI (AntiPiracy Video Identification) 
+	-- анализатор видео-контента. 
+	\end{block}
 \end{frame}
 
-\begin{frame}{Алгоритм GIB AntiPiracy}
+\begin{frame}
 	\begin{enumerate}
 		\item 
 		Возьмём корпус изучаемой нами задачи
@@ -290,7 +302,7 @@
 	... ... ...
 \end{frame}
 
-\begin{frame}{Алгоритм GIB AntiPiracy}
+\begin{frame}
 	\small
 	\begin{enumerate}
 		\item[4] Посчитаем предварительный скоринг ($preliminary\_score$) для каждого текста 
@@ -315,15 +327,33 @@
 	Функция $A(m)$ -- монотонно возрастающий от $m$ коэффициент
 \end{frame}
 
-\begin{frame}{Алгоритм GIB AntiPiracy}
+\begin{frame}
 	\begin{enumerate}
-		\item Зададим монотонно неубывающую функцию $M$:
-		\begin{equation}
-		score = M (preliminary_score)
-		\end{equation}
+		\item [5]Зададим монотонно неубывающую функцию $\bold M$:
 	\end{enumerate}
+	
+	\begin{equation}
+	score \stackrel{def}{=} \bold M (preliminary\_score) \in [0, 1000]
+	\end{equation}
+	
+	\auditorium{Как задать $\bold M$, если у нас есть тестовая выборка?}
+	
+	\auditorium{Как с помощью принципа $AI^2$ править функционал $\bold M$?}
 \end{frame}
 
+
+\begin{frame}
+	Результат:
+	\begin{itemize}
+		\item Если исключить страницы, у которых вообще остуствует описание, то нет пропуска цели. Совсем
+		\item Точность 98\%\footnote{По состоянию на июль 2018}. Но не всегда описание фильма -- это пиратство. Возможно 
+		это фан-форум. \auditorium{Как решить эту проблему?}
+		\item Нет описания фильма -- алгоритм не работает. Например это может быть переход по ссылке из объявления вК.
+	\end{itemize}
+
+\end{frame}
+
+\section{Feature Extraction в текстовых данных (Часть 2)}\label{section:texts_fe2}
 
 
 \begin{frame}{Инструменты для работы с текстами}
