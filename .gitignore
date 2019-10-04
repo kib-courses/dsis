@@ -8,6 +8,8 @@
 */*.snm
 */*.synctex.gz
 */*.toc
+*/*.pyg
+*/*.vrb 
 
 # Идея
 .idea/*
