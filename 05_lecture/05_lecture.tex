@@ -355,6 +355,26 @@
 
 \section{Feature Extraction в текстовых данных (Часть 2)}\label{section:texts_fe2}
 
+\begin{frame}{TF-IDF}
+	\begin{itemize}
+		\item TF — term frequency
+		\item IDF — inverse document frequency
+	\end{itemize}
+	TF-IDF одна из самых старых \term{статистических} мер.
+	Использовалась в поисковых системах выдачи в середине 90-х.
+	
+	\begin{equation}
+	TF(t, \bold t) = \frac{count(t|\bold t)}{m(\bold t)}
+	\end{equation}
+	где $count(t|\bold t)$ -- 
+	количество раз, когда токен $t$
+	встречается в тексте $\bold t$;
+	а $m(\bold t)=m$ -- это количество токенов в $\bold t$.
+	
+	% TODO
+	
+	
+\end{frame}
 
 \begin{frame}{Инструменты для работы с текстами}
 	\begin{enumerate}
