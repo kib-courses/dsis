@@ -240,18 +240,91 @@
 	Будем считать омонимы -- \term{выбросами}.
 \end{frame}
 
-\begin{frame}{Кривая Ципфа (Zipf) и закон Ципфа} 
-	Возьмём очень большой корпус текста
+\begin{frame}{Закон Ципфа(Zipf)} 
+	\small
+	Возьмём очень большой \termdef{корпус}\footnote{\termdef{корпус}(линг.) -- совокупность текстов естественного языка}
 	(Например все произведения Дарьи Донцовой)
+		
+	Обозначим за l количество слов в корпусе. $l >> 0$
 
 	По оси $x$ отложим \termdef{шкалу порядка} слова.
 	То есть упорядочим слова от самого употребляемого к самому неупотребительному.
 	
+	По оси $y$ -- количество раз, когда слово встречалось в тексте.
+	
+	Для любого естественного языка существует \termdef{гипербола} $g(x)$, такая что:
+	\begin{equation}
+	\lim_{l \longrightarrow \infty} \frac{y(x)}{g(x)} = 1
+	\end{equation}
 \end{frame}
 
-\begin{frame}{Простой алгороритм на основе BoW}
-	
+\begin{frame}{Кривая Ципфа}
+	\includegraphics[width=11.5cm]{../pic/zipf_curve.png}
 \end{frame}
+
+\begin{frame}{Алгоритм GIB AntiPiracy}
+	Дать описание о чём это и где используется 
+	% TODO описание
+\end{frame}
+
+\begin{frame}{Алгоритм GIB AntiPiracy}
+	\begin{enumerate}
+		\item 
+		Возьмём корпус изучаемой нами задачи
+		
+		\begin{block}{Замечание}
+		Очень важно взять корпус именно изучаемой задачи.
+		Например если решаем проблему антипиратства, то корпус должен состоять 
+		только из описаний к различным фильмам.
+		\end{block}
+		\item Для корпуса построим кривую Ципфа
+		\item Разобьём ось $x$ на точки 
+		\begin{equation}
+		0 = x_0 < x_1 < x_2 < ... < x_n < x_{n+1} = \infty
+		\end{equation}
+		и зададим веса
+		\begin{equation}
+		0 = w_0 = w_1 < w_2 < w_3 < ... < w_n 
+		\end{equation}
+	\end{enumerate}
+	... ... ...
+\end{frame}
+
+\begin{frame}{Алгоритм GIB AntiPiracy}
+	\small
+	\begin{enumerate}
+		\item[4] Посчитаем предварительный скоринг ($preliminary\_score$) для каждого текста 
+	\end{enumerate}
+	
+	Для этого для каждого текста $\bold t$ получаем его на токены (функция $get\_tokens$):
+	\begin{equation}
+		\left(t_1, t_2, ..., t_m\right) := get\_tokens (\bold t)
+	\end{equation}
+	
+	Для каждгого токена определён его ранг: $x = x(t)$
+	Задаём функцию скоринга для токена:
+	\begin{equation}
+	W(t) \stackrel{def}{=} w_i, ~\text{если}~ x_{i} \leqslant x(t) < x_{i+1}
+	\end{equation}
+	
+	Тогда предварительный скоринг вычисляется по формуле:
+	\begin{equation}
+	preliminary\_score = -A(m) + \sum_{j=1}^{j=m} W(t_j)
+	\end{equation}
+	
+	Функция $A(m)$ -- монотонно возрастающий от $m$ коэффициент
+\end{frame}
+
+\begin{frame}{Алгоритм GIB AntiPiracy}
+	\begin{enumerate}
+		\item Зададим монотонно неубывающую функцию $M$:
+		\begin{equation}
+		score = M (preliminary_score)
+		\end{equation}
+	\end{enumerate}
+\end{frame}
+
+
 
 \begin{frame}{Инструменты для работы с текстами}
 	\begin{enumerate}
