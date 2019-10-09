@@ -14,12 +14,29 @@
     
 \begin{frame}{План лекции}
     \begin{enumerate}
+    	\item \nameref{section:rsa_fp}
 		\item \nameref{section:feedback}
 		\item \nameref{section:rsa_feedback}
 		\item \nameref{section:risk_engine}
 		\item \nameref{section:rules_engine}
 	\end{enumerate}
 \end{frame}
+
+\section{RSA Fraud Prevention}\label{section:rsa_fp}
+
+\begin{frame}
+	Офф.сайт: \url{https://www.rsa.com/en-us/products/fraud-prevention}
+	
+	По словам маркетинга от 2015 года: <<более 8000 заказчиков>>.
+	
+	На территории России:
+	\begin{enumerate}
+		\item Сбербанк
+		\item ВТБ
+	\end{enumerate}
+	
+\end{frame}
+
 
 \section{Обратная связь}\label{section:feedback}
 
@@ -240,7 +257,7 @@
 		\item \termdef{Risk Engine} -- это классификатор, 
 		возвращающий значения RISK\_SCORE от 0 до 1000. 
 		Чем выше это значение, тем более вероятность мошенничества.
-		\item \termdef{Rules Engine} -- это ЭС,
+		\item \termdef{Rules Engine}\footnote{После ребрендинга <<Policy Management Application>>}) -- это ЭС,
 		принимающая на вход значения \term{Risk Engine}
 		и другие признаки транзакции, и выдающая решения
 		ALLOW, REVIEW, CHALLANGE или DENY.
