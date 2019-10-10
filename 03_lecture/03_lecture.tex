@@ -109,13 +109,13 @@
 \begin{frame}{Стабильность. <<Цепочка>>}\label{frame:chain_score}
 	Есть итеративная система обучения и имеем скоринги:
 	\begin{equation*}
-	score_{i-n} := fit ( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i-n} \cup ... \cup \hat U_{i-1} \cup \hat U_{i}) 
+	score_{i-n} := fit ( \hat U_{1} \cup \hat U_2 \cup  ... \cup \hat U_{i-n-1} \cup \hat U_{i-n}) 
 	\end{equation*}
 	\begin{equation*}
 	...
 	\end{equation*}
 	\begin{equation*}
-	score_{i-1} := fit ( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i-1} \cup \hat U_{i}) 
+	score_{i-1} := fit ( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i-2} \cup \hat U_{i-1}) 
 	\end{equation*}
 	\begin{equation*}
 	score_{i} := fit ( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i}) 
@@ -134,6 +134,23 @@
 		+ 0.5 \cdot score_{i}(\bold x) 
 	\end{equation*}
 \end{frame}
+
+
+\begin{frame}{Стабильность. <<Цепочка>>}
+	Так же можно рассчитывать функции $score_{i}$ не за вcё время:
+
+	\begin{equation*}
+		score_{i} := fit \left( \hat U_{1} \cup \hat U_2 \cup ... \cup  \hat U_{i} \right) 
+	\end{equation*}
+	
+	А за последние $m$ дней:
+	\begin{equation*}
+		score_{i} := fit \left( \hat U_{i-m+1} \cup \hat U_{i-m+2} \cup ... \cup  \hat U_{i} 
+	\right) 
+	\end{equation*}
+	
+\end{frame}
+
 
 
 \begin{frame}
@@ -174,11 +191,10 @@
 		\item Анализируется мошенничество заказчика и создаются правила
 	\end{enumerate}
 
-	Эксплуатация:
+	Жизненный цикл работы:
 	\begin{enumerate}
 		\item Расчёт вектора признаков $\bold x$
 		\item Risk Engine
-			\item 
 		\item Rules Engine
 		\item Процессинг системы
 	\end{enumerate}
@@ -208,7 +224,7 @@
 \begin{frame}{CUSTOM\_MARK}\label{frame:custom_mark}
 	Маркировка проходит вручную.
 	\begin{itemize}
-		\item СUSTOM\_MARK=U (Uknoun) – неизвестная транзакция
+		\item СUSTOM\_MARK=U (Unknown) – неизвестная транзакция
 		\item СUSTOM\_MARK=G (Genuine\footnote{RSA олдскульная система. Вместо флага L(legitim) в ней используется флаг G}) – подлинная
 		\item СUSTOM\_MARK=F (Fraud) – фродовая
 		\item СUSTOM\_MARK=S (Suspicious) – скорее всего фродовая
@@ -281,16 +297,22 @@
 	Маркетинговая информация: \url{https://www.emc.com/collateral/hardware/h9096-rsa-risk-engine-sb-11-2.pdf}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Пример правила}
+	Если 
+	($RISK\_SCORE > 700$) $\bigwedge$
+	(Возраст клиента > 55 лет) $\bigwedge$
+	(Сумма операции > 4997 рублей ) $\bigwedge$
+	(MCC $\neq$ 3137)\footnote{\termdef{Merchant Category Code} -- номер деятельности при осуществлении безналичной оплаты. Например \textbf{1731} означает оплату за электроэнергию, \textbf{3137} -- покупка авиабилетов, \textbf{4121} -- такси} $\bigwedge$
+	... $\bigwedge$
+	то тогда  $REVIEW$.
 	
 \end{frame}
 
-
-\section{RSA Risk Engne}\label{section:risk_engine}
+\section{RSA Risk Engine}\label{section:risk_engine}
 
 \begin{frame}
 	\begin{block}{Замечание}
-	Описание Risk Engne актуально на 2015 год. Возможно многие моменты изменились 
+	Описание Risk Engine актуально на 2015 год. Возможно многие моменты изменились 
 	(вряд ли, т.к. это жёстокий энтерпрайз)
 	\end{block}
 \end{frame}
