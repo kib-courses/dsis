@@ -207,11 +207,11 @@
 
 \begin{frame}{Сказка о глупом мышонке\footnote{основана на реальных событиях. Нет, это произошло не со мной :)}}
 	\footnotesize
-	Жыла была мышь-датасаентолог. 
+	Жыла была Мышь-датасаентолог. 
 	
 	Решила она создать UEBA систему распознавания почерка движения мыши(компьютерной) 
 	для мышей(настоящих).  	
-	Мышь собрала \textit{нескольких} своих друзей мышек, 
+	Мышь собрала \textit{нескольких} своих друзей-мышек, 
 	которые по 30 минут играли в игру, используя мышь(компьютерную).
 	$refusal$ у системы $0\%$ (мышь-датасаентолог и не думала рассчитывать эту величину),
 	$\hat T = 100\%$, а вот средняя $T = 76\%$.
@@ -219,7 +219,7 @@
 	Мышь идёт к Лосю-инвестору. Лось-инвестор в восторге
 	и на дофига тугриков нанимают полк мышей для внедрения 
 	данной UEBA системы
-	в ДБО <<ЛГБТ>> (Лучший городской банк тушканчиков),
+	в <<Процессинг X>>,
 	в котором обслуживаются 5 млн. тушканчиков.
 	
 	В конце epic fail: система не заработала. 
@@ -277,7 +277,105 @@
 
 \section{Mouse Track Analysis}\label{section:mca}
 
+\begin{frame}{Академические работы}
+	\footnotesize
+	\begin{enumerate}
+		\item 
+		диссертация
+		С.М.Диденко
+		\href{http://www.tmnlib.ru/jirbis/files/upload/abstract/05.13.18/605.pdf}{<<Разработка и исследование компьютерной модели динамики системы Пользователь-Мышь>>}
+		\item 
+		Praveen Sundar,
+		A.V. Senthil Kumar
+		\href{https://www.researchgate.net/publication/309558781_An_Improved_User_Verification_in_Online_Learning_Systems_Using_Behavioral_Profile}{<<An Improved User Verification in Online Learning Systems Using Behavioral Profile>>}
+		\item Eric Hehman,
+		Ryan Stolier,
+		Jonathan B Freeman
+		\href{https://www.researchgate.net/publication/276140699_Advanced_mouse-tracking_analytic_techniques_for_enhancing_psychological_science}{<<Advanced mouse-tracking analytic techniques for enhancing psychological science>>}
+		\item 
+		Bassam Sayed,
+		Issa Traore,
+		Isaac Woungang,
+		Mohammad S. Obaidat
+		\href{https://www.researchgate.net/publication/258792177_Biometric_Authentication_Using_Mouse_Gesture_Dynamics}{Biometric Authentication Using Mouse Gesture Dynamics}
+		\item 
+		Nazirah Abd. Hamid,
+		Siti Dhalila Mohd Satar,
+		Safie, S.,
+		Suriayati Chuprat,
+		\href{https://www.researchgate.net/publication/249315717_Mouse_Movement_Behavioral_Biometric_Systems}{<<Mouse Movement Behavioral Biometric Systems>>}
+		\item ...
+	\end{enumerate}
+	\auditorium{Помним сказку о глупом мышонке...}
+\end{frame}
 
+\begin{frame}{Сырые данные MTA}
+	\small
+	В MTA (Mouse Track Analysis) существуют следующие сырые данные:
+	\begin{itemize}
+		\item $x, y$ -- координаты x, y курсора относительно окна
+		\item $page\_x$, $page\_y$ -- координаты x, y курсора относительно страницы.
+		На практике $page\_x \equiv x$, так как вбок не скролят. 
+		\item $time\_stamp$ -- временная метка с определённой точностью.
+		На практике лучше с точностью до 1/100 секунды. 
+		Однако JS работает не стабильно и это вносит дополнительные проблемы.
+		\item $which$ -- 0 если никакая клавиша не нажата (99.9\%),
+		1 -- нажата основная клавиша (левая, если правша; правая если левша),
+		2 -- вторичная,
+		3 -- колесо мыши
+		4,5 и т.д. -- клавиши игровых мышек.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Нормализация данных}
+	\small
+	С данными у которых произвольный $time\_stamp$ неудобно работать. 
+	Разумно их привести к нормализованному виду с определённым шагом
+	(например 10 или 25 мс.).
+	
+	В этом случае можно сохранить только $time\_stamp(0)$ -- временную метку начала трека мыши.
+
+	Так же разумно удалить выбросы перед нормализацией.
+
+	Методы нормализации:
+	\begin{enumerate}
+		\item \termdef{линейная интерполяция}.
+		Это элементарный способ. Достаточно эффективен, если количество отсчётов в JS
+		высоко. Однако неточности JS отсчётов не удаляются
+		\item \termdef{(n, m, k) ансамбль полиномов} -- берем полиномы $n$-ой степени от $m$ точек. 
+		Усредняем $k$ соседних полиномов в окрестностях точки $(x,y)$.
+		\item \termdef{Фильтр Калмана} -- \auditorium{ДЗ}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Два подхода к решению задачи курсорного почерка}
+	После нормализации, можно решать задачу одним из двух способов:
+	\begin{enumerate}
+		\item Нейронные сети
+		\item Классическое машинное обучение
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Нейронные сети}
+	Варианты:
+	\begin{enumerate}
+		\item на каждого пользователя создаётся своя нейронная сеть: свой/чужой.
+		Недостатки: мало обучающего материала для класса "свой";
+		огромные вычислительные издержки если пользователей много 
+		(ведь на каждого пользователя своя нейронная сеть)
+		\item решение общей задачи фрод-нефрод.
+		Недостатки: проблема переобучения; плохие априорные вероятности в 
+		диапазонах от 0.2 до 0.8;
+		мало данных для обучения (фродовых данных по прежнему МАЛО)
+	\end{enumerate}
+
+	Однако нейронные сети -- это будущее MTA, при условии если данных 
+	трека мыши пользователя действительно много!
+\end{frame}
+
+\begin{frame}{Машинное обучение}
+
+\end{frame}
 
 
 \section{Mobile Entity Analitics}\label{section:mea}
