@@ -74,7 +74,7 @@
 	Тогда \termdef{точность обнаружения своих для класса $i$} ($\hat T$)
 	% и \termdef{полнота обнаружения для класса $i$} ($\Pi$)
 	определяется по формуле:
-	\begin{equation}
+	\begin{equation}\label{eq:ueba_self_presicion_def}
 	\hat T_i \stackrel{def}{=} P (L_r^i | L_s^i)
 	\end{equation}
 	% \begin{equation}
@@ -144,10 +144,10 @@
 		как аномальное для пользователя $i$
 	\end{itemize}
 
-	Тогда \termdef{точность [для определения чужих]}	
+	Тогда \termdef{точность [определения чужих]}	
 	для пользователя $i$	
 
-	\begin{equation}
+	\begin{equation}\label{eq:ueba_presicion_def}
 	T_i \stackrel{def}{=} P (A_r^i | A_s^i)
 	\end{equation}
 \end{frame}
@@ -167,12 +167,12 @@
 	\end{equation}
 	
 	Точностью [определения чужих] считается средняя величина:
-	\begin{equation}\label{eq:ueba_presicion_def}
+	\begin{equation}\label{eq:ueba_presicion_def_equation}
 	T = \frac{\sum_{i=1}^{n} T_i \cdot \left [\hat{T_i} > \hat T \right]}{n_1} 
 	\end{equation}
 	
 	Или медиана.
-	\auditorium{ДЗ. Самостоятельно напишите формулу, аналогичную \eqref{eq:ueba_presicion_def}}
+	\auditorium{ДЗ. Самостоятельно напишите формулу, аналогичную \eqref{eq:ueba_presicion_def_equation}}
 \end{frame}
 
 \begin{frame}{Примеры ошибок}
@@ -451,8 +451,24 @@
 		\item Что такое Д.Н.К.?
 		\item Предложите Д.Н.К. для решения задачи третированной рекламы c помощью данных UEBA.
 		\item Предложете Д.Н.К. для решения задачи обнаружения мошенничества среди пенсионеров c помощью данных UEBA.
-		\item 
+		\item В чем различаются задачи: обнаружение мошенничества, детектирования свои/чужие, обнаружение аномалий в поведении? Как бы вы решали эти задачи? Что входило бы в класс 0, что в класс 1?
 	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Точность и полнота свои/чужие.}
+\begin{enumerate}
+	\item Аналогично формулам 
+		\eqref{eq:ueba_self_presicion_def}
+		и
+		\eqref{eq:ueba_presicion_def}
+		можете ввести понятия полноты на своих для пользователя $i$ и полноты для чужих
+		для пользователя $i$?
+	\item Есть ли смысл введения понятия полноты для своих для пользователя $i$ и полноты для чужих для пользователя $i$? 
+	\item Аналогично \eqref{eq:ueba_self_precision_equation} 
+		и \eqref{eq:ueba_presicion_def_equation}
+		можете ввести понятия полноты определения своих и полноты [определения чужих]?
+	\item Есть ли смысл введения понятия полноты определения своих и полноты [определения чужих]? 
+\end{enumerate}
 \end{frame}
 
 
