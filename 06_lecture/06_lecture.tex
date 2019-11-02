@@ -60,8 +60,85 @@
 \end{frame}
 
 
-\section{Постановка задач ИБ}\label{section:text_tasks}
+\section{Задача исследования активностей пользователей и мапинг.}\label{section:text_tasks}
 
+\begin{frame}
+		
+	\begin{center}
+		\includegraphics[width=9.5cm]{../pic/sber_logo_1.png}\centering
+	\end{center}
+
+\end{frame}
+
+\begin{frame}{Мапинг страниц}
+	\includegraphics[width=4.9cm]{../pic/sber_logo_1.png}
+	\includegraphics[width=5.7cm]{../pic/sber_logo_2.png}
+	
+	\textbf{https://[$\hat{}$/]+/CSAFront/index.do} ~~ $\longmapsto$ 258
+	
+	\textbf{https://[$\hat{}$/]+/PhizIC/private/payments/print.do$\backslash$?id=} ~~ $\longmapsto$ 54
+\end{frame}
+
+\begin{frame}{Мапинг страниц}
+	Задача мапинга не тривиальна, как может показатся на первый взгляд.
+	
+	Одни из проблем мапинга:
+	\begin{enumerate}
+		\item Некоторые URL имеют таргетированную информацию (например номер счёта, id и т.д.).
+		Эти числа не должны учитываться в регулярных выражениях.
+		С другой стороны существуют существенные идентификаторы. 
+		(В случае Сбербанк.Онлайн например ServiceID)
+		\item Некоторые страницы делают одно и то же но в силу каких-либо исторических причин 
+		имеют несколько url
+		\item Приоритет регулярных выражений. Они могут пересекаться и возникнут ошибки.
+		\item \auditorium{что ещё?}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Построение мапинга}
+	Процесс итеративный.
+	\begin{enumerate}
+		\item Собираем данные
+		\item Пишем регулярные выражения
+		\item Удаляем данные попавшие под регулярные выражения. Если ещё есть url, то goto 2
+		\item goto 1
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{SPA}
+	Одностраничные приложения (single page application, SPA)
+	имеют ровно один url
+	
+	\auditorium{Как проводим мапинг?}
+\end{frame}
+
+\
+
+\begin{frame}{Итог мапинга}
+	\small
+	Любое нахождение на каком либо действии можно представить в виде действия.
+	
+	\begin{tabular}{lr}
+		\textbf{regexp} & \textbf{num} \\
+		... & ... \\
+		https://[$\hat{}$/]+/PhizIC/private/payments/payment.do$\backslash$?id= & 50 \\
+		https://[$\hat{}$/]+/PhizIC/private/payments/payment.do$\backslash$?template= & 51 \\
+		https://[$\hat{}$/]+/PhizIC/private/payments/payment.do$\backslash$?offerId= & 52 \\
+		... & ... \\
+		https://[$\hat{}$/]+/PhizIC/private/news/dayList.do & 117 \\
+		https://[$\hat{}$/]+/PhizIC/private/ima/office/list.do & 118 \\
+	\end{tabular}
+	
+	Таким образом каждый url с помощью \textbf{regexp} мапится в уникальный 
+	номер $num$ единственным способом. 
+\end{frame}
+
+\begin{frame}}{Итог мапинга}
+	С помощью мапинга любую активность пользователя можно представить в виде последовательности
+	действий:
+	
+	
+\end{frame}
 
 \section{Алгоритм behс}\label{section:behс}
 
