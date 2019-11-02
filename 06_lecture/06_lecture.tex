@@ -175,6 +175,166 @@
 	\auditorium{Ваши предложения? \\ Как бы вы решали эту задачу?}
 \end{frame}
 
+
+% На этом слайде нужно рисовать маркером дерево переходов и объяснять как оно получилось
+\begin{frame}[t]
+	\includegraphics[width=5cm]{../pic/beh/idea_2.png}
+\end{frame}
+
+\begin{frame}
+	\Large
+	\centering
+	Теперь давайте дадим \\ формальный алгоритм.
+\end{frame}
+
+\begin{frame}{Вес подпоследовательности}
+	\small
+	Любую сессию $S_i$ можно представить в виде
+	\begin{equation}
+	S_i = \left( s_1^i, s_2^i, ... s_n^i\right)
+	\end{equation}
+	при этом $n \neq const$, эта величина различна для разных $S_i$.
+	
+	Зафиксируем параметры $l_1$ и $l_2$.
+	
+	Введем операцию получения \textit{всех} подпоследовательностей $\bold b = (s_j^i, s_{j+1}^i, ...)$ длины $l_1 \leqslant l \leqslant l_2$
+	из цепочки сессии $S_i$:
+	\begin{equation}
+	B(S_i ; l_1, l_2) = \left\{ \bold b \right\}_i
+	\end{equation}
+	
+	Введём флаги:
+	\begin{itemize}
+		\item $f=0$ -- легитимная ($L$);
+		\item $f=1$ -- мошенническая ($F$).
+	\end{itemize}
+
+	... ... ... ... ...
+\end{frame}
+
+
+\begin{frame}{Вес подпоследовательности}
+	\small
+	... ... ... ... ...
+	
+	Введем величину $C(\bold b, f)$, обозначающее количество $S_i$ из множества всех $\left\{ S_i \right\}$,
+	которые содержат некий \textit{фиксированный} $\bold b$. 
+	и которым соответствует некий фиксированный флаг $f$  
+	
+	На языке кванторов:
+	\begin{equation}
+	C(\bold b, f) \stackrel{def}{=} \lVert
+		\left\{ 
+			S_i \in  \left\{S_i\right\}   : \bold b \in S_i 
+			\wedge f \longmapsto S_i
+		\right\}
+	\lVert
+	\end{equation}
+	
+	Тогда для каждого $\bold b$ можно ввести два веса:
+	\begin{equation}\label{eq:W_0_simple}
+	W_0 (\bold b) \stackrel{def}{=} \frac{C(\bold b, 0)}{C(\bold b, 1) + 1}
+	\end{equation}
+	\begin{equation}\label{eq:W_1_simple}
+	W_1 (\bold b) \stackrel{def}{=} \frac{C(\bold b, 1)}{C(\bold b, 0) + 1}
+	\end{equation}
+\end{frame}
+
+\begin{frame}
+	Введём \term{параметры} $C_0$ и $C_1$.
+	
+	Выберем $C_0$ подпоследовательностей $\bold b$ с максимальным весом $W_0$
+	и $C_1$ подпоследовательностей $\bold b$ с максимальным весом $W_1$.
+	
+	Полученное множество -- и есть множество характерных подпоследовательностей.
+	
+	Feature Extraction завершён.
+
+	\auditorium{В чём основная задача этого алгоритма? Что упустили? Неужели всё так просто?}	
+\end{frame}
+	
+\begin{frame}
+	Основная проблема алгоритма -- расчёт $C(\bold b, f)$. Для этого необходимо строить дерево переходов. 
+	
+	Введём операцию:
+	\begin{equation}
+	G(\bold b) = G\big( (s_1, s_2, ..., s_m) \big)
+	= \big\{ (\lambda, s_1), (s_1, s_2), ... (s_{m-1}, s_m) \big\}
+	\end{equation}
+\end{frame}
+
+\begin{frame}{Формальный алгоритм}
+	\small
+	\begin{enumerate}
+		\item Определим $D$ как граф, содержащий ровно одну вершину $\lambda$.
+		\item Выбираем любой $S_i$ из $\big\{ S_i\big\}$ и определяем флаг $f \longmapsto S_i$.
+			\label{behc:item:get_next}
+		\item \term{Помечаем} вершину $\lambda$.
+		\item $\forall \bold b \in B(S_i; l_1, l_2)$:  
+		$\forall (s_1, s_2) \in G(b)$: 
+		\begin{enumerate}
+			\item Если от \term{помеченной} $s_1$ нет
+			вершины $s_2$, то создаём новую вершину $s_2$, ребро $s_1 \longmapsto s_2$,
+			и для этого ребра устанавливаем вес $(c_0,c_1)=(0,0)$.
+			\item Берём вес $\big(c_0, c_1\big)$ ребра $(s_1, s_2)$.
+			Переопределяем вес:
+			\begin{enumerate}
+				\item $\big(c_0 + 1, c_1\big)$, если $f=0$;
+				\item $\big(c_0, c_1 +1 \big)$, если $f=1$.
+			\end{enumerate}
+			\item \term{помечаем} вершину $s_2$.
+		\end{enumerate}
+		\item Удаляем $S_i$ из множества $\big\{ S_i\big\}$.
+		\item Если $\big\{ S_i\big\}\neq \varnothing$, то переходим на п.\ref{behc:item:get_next}.
+		\item Проходим по дереву и рассчитываем все $C(\bold b, f)$
+		через рёбра дерева. Рассчитываем все $W_0(\bold b)$ и $W_1(\bold b)$.
+	\end{enumerate}	
+\end{frame}
+
+\begin{frame}{Пример. Вход}
+	\centering
+	\includegraphics[width=11cm]{../pic/beh/idea_2.png}
+\end{frame}
+
+\begin{frame}{Пример. Выход}
+	% TODO перерисовать D_example.odg полностью!
+	\centering
+	\includegraphics[width=11cm]{../pic/beh/D_example.png}
+\end{frame}
+
+\begin{frame}{Пример. Выход}
+	\includegraphics[width=8cm]{../pic/beh/D_example.png}
+	
+	В этом примере:
+	\begin{itemize}
+		\item $C \big( (4,8); 0\big) =  C \big( (4,8); 1\big) = 3$;
+		\item $C \big( (4,8,5); 0\big) = 3$, $C \big( (4,8,5); 1\big) = 0$;
+		\item $C \big( (4,8,11); 0\big) = 0$, $C \big( (4,8,11); 1\big) = 3$.
+	\end{itemize}
+	
+\end{frame}
+
+
+\begin{frame}{Важные нюансы}
+	Существует проблема <<похожих>> подпоследовательностей.
+	Это когда их длина отличается на 1, но у них примерно похожие $W_1$ или $W_2$.
+	Таким образом они обе попадут в признаки. \auditorium{Что делать?}
+	
+	Формулы \eqref{eq:W_0_simple} и \eqref{eq:W_1_simple} не являются оптимальными 
+	и плохо работают когда $C(\bold b, 0)$ и/или $C(\bold b, 1)$ малы.
+	\auditorium{Как решаем эти проблемы?}
+	
+	И самое важное: алгоритм не учитывает корреляцию цепочек друг с другом. 
+	Однако на практике как правило это не существенно. \auditorium{Почему?}
+\end{frame}
+
+
+
+
+
+
+
+
 \section{Алгоритм behi}\label{section:behi}
 
 
