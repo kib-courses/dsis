@@ -112,7 +112,6 @@
 	\auditorium{Как проводим мапинг?}
 \end{frame}
 
-\
 
 \begin{frame}{Итог мапинга}
 	\small
@@ -328,14 +327,72 @@
 	Однако на практике как правило это не существенно. \auditorium{Почему?}
 \end{frame}
 
+\begin{frame}{Сложность алгоритма}
+	Сложность построения линейная:
+	\begin{equation}
+	O \big( \lVert \{ S_i\} \rVert \big)
+	\end{equation}
+	
+	Обозначим за $A$ мощность алфавита всевозможных $s_j^i$.
+	 
+	Сложность памяти (дерево $D$) экспоненциальная: 
+	\begin{equation}
+	O(A^{l_2})
+	\end{equation}
+	
+	\auditorium{Это слишком большие требования для памяти! Что делать?}
+\end{frame}
+
+\begin{frame}{Метафора}
+	В русском языке 33 буквы. \auditorium{Верно ли, что количество слов из 10
+		букв вычисляется по формуле?}:
+	\begin{equation*}
+	33^{10}
+	\end{equation*}
+	
+	\LARGE
+	\centering
+	\auditorium{?}
+\end{frame}
+
+\begin{frame}{Метафора}
+	В русском языке 33 буквы. Верно ли, что количество слов из 10
+	букв вычисляется по формуле?:
+	\begin{equation*}
+	33^{10}
+	\end{equation*}
+	
+	Нет, не верно! 
+	
+	Если оценивать все \textit{письменные литературные труды} А.С.Пушкина,
+	то его словарный запас всего 21 191 слово.
+\end{frame}
+
+\begin{frame}
+	\textbf{Эмпирически} посчитали память и убедились, что при $l_2 > 8$ она линейная:
+	\begin{equation}
+	O(l_2 \cdot A)
+	\end{equation}
+	\includegraphics[width=11cm]{../pic/beh/O_memory.png}
+\end{frame}
+
+\begin{frame}{Информативность признаков}
+	На одном заказчике:
+	\centering
+	\includegraphics[width=11.5cm]{../pic/beh/informativity.png}
+\end{frame}
+
+\begin{frame}{Корреляция признаков}
+\centering
+\includegraphics[width=9cm]{../pic/beh/feature_correlation.png}
+
+\end{frame}
 
 
+% TODO когда окончательно выйдут патенты, дать ссылки на патенты
 
-
-
-
-
-\section{Алгоритм behi}\label{section:behi}
+% TODO в следующем году, т.к. Group-IB только его ввёл.
+% \section{Алгоритм behi}\label{section:behi}
 
 
 \section{Вопросы для самопроверки}
