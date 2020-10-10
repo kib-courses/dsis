@@ -3,7 +3,7 @@
 
 \title{Лекция 1. Экспертные системы, полнота, точность. Задачи ИБ, решаемые ЭС.}
 % \date{\today}
-\date{17 сентября 2019}
+\date{10 октября 2019}
 \author{Павел Владимирович Слипенчук}
 \institute{Москва, МГТУ им.Бауманка,\\ каф.ИУ-8, \href{https://t.me/kibinfo}{КИБ}}
 % \titlegraphic{\includegraphics[width=2cm]{logo_ur.jpg}}
@@ -14,7 +14,7 @@
     
   \begin{frame}{План лекции}
     \begin{enumerate}
-    \item \nameref{section:history_remarks}
+    \item \nameref{section:history_remarks} \textit{(домашнее задание)}
     \item \nameref{section:expert_systems_recall_presision}
     \item \nameref{section:is_tasks}
 	\end{enumerate}
@@ -159,10 +159,14 @@
   		Для улучшения качества работы экспертной системы, понимания границ ее применения,
   		необходимо знать о её внутреннем устройстве.
   		
-  		Но для оценки её качества на тестовых данных, ЭС можно воспринимать как чёрный ящик.
+  		Но для оценки её качества на определённом наборе данных, ЭС можно воспринимать как чёрный ящик.
+  		
   		Таким образом, чтобы принять работу, не требуется быть специалистом в области DS/ML.
   	\end{block}
   \end{frame}
+
+
+
 
   \begin{frame}{Априорная и апостериорная вероятности}
   
@@ -471,6 +475,67 @@
   \begin{frame}{Ансамбли}
   \includegraphics[width=11cm]{../pic/ensemble_example.png}
   \end{frame}
+
+
+
+\begin{frame}{Score Engine \& Rules Engine}
+	\small
+	\begin{itemize}
+		\item \termdef{Score Engine (реже Risk Engine)} -- это система,
+		возвращающая \term{априорную вероятность} мошенничества на \term{входное событие}.
+		Чем выше это значение, тем более вероятность мошенничества.
+		\item \termdef{Rules Engine}-- это ЭС,
+		принимающая на вход значения \term{Score Engine}
+		и другие признаки cобытия, и выдающая решения.
+	\end{itemize}
+	
+	Обычно для удобства выход Score Engine представляют не от $0.0$ до $1.0$, 
+	а от $0$ до $100$ или от $0$ до $1000$. Данную величину называют скорингом (score value)
+	
+	\begin{block}{Замечание}
+		Для заказчика Score Engine -- это чёрный ящик,
+		он не вмешивается в его работу. 
+		Score Engine даётся <<as is>>, 
+		или для крупных заказчиков настраивается отдельно.
+	\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Пример}
+    
+    \includegraphics[width=9cm]{../pic/expert_system_rsa.png}
+	
+	\small
+	Если 
+	($SCORE > 700$) $\bigwedge$
+	(Возраст клиента > 55 лет) $\bigwedge$
+	(Сумма операции > 4997 рублей ) $\bigwedge$
+	(MCC $\neq$ 3137)\footnote{\termdef{Merchant Category Code} -- номер деятельности при осуществлении безналичной оплаты. Например \textbf{1731} означает оплату за электроэнергию, \textbf{3137} -- покупка авиабилетов, \textbf{4121} -- такси} $\bigwedge$
+	... $\bigwedge$
+	то тогда  $REVIEW$.
+	
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+	Критерии оценки качества ЭС:
+	\begin{enumerate}
+		\item Полнота и точность;
+		\item Время $t$ принятия на событие $x$. $t(x)$;
+		\item Требуемая память;
+		\item Сложность разработки правил Rules Engine;
+		\item Требуемая оперативная память.
+	\end{enumerate}
+	
+	\begin{block}{Замечания.}
+		$t(x) \neq const$. Cистема может иметь хорошую полноту, но плохую точность.
+	\end{block}
+\end{frame}
 
   \section{Задачи ИБ, решаемые экспертными системами}\label{section:is_tasks}
 	
