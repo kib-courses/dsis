@@ -244,14 +244,18 @@ if-else
 **Упражнение №5.0.1**  
 
 Освойтесь с NumPy с помощью этого туториала:  
+
 https://jakevdp.github.io/PythonDataScienceHandbook/02.00-introduction-to-numpy.html
   
 Перед следующим упражнением, убедитесь что вы понимаете разницу между nparray и стандартным list!  
   
 **Упражнение №5.0.2**  
-Изучите Pandas - дефакто стандарт для работы с табличными (не bigdata) данными.
+Изучите Pandas - дефакто стандарт для работы с табличными (не bigdata) данными.  
+
 https://jakevdp.github.io/PythonDataScienceHandbook/03.01-introducing-pandas-objects.html
+
 https://jakevdp.github.io/PythonDataScienceHandbook/03.02-data-indexing-and-selection.html
+
 https://jakevdp.github.io/PythonDataScienceHandbook/03.01-introducing-pandas-objects.html 
  
 **Упражнение №5.1**  
@@ -265,7 +269,7 @@ https://jakevdp.github.io/PythonDataScienceHandbook/03.01-introducing-pandas-obj
  * loc[k,z] - получить элемент по k-му значению построчного индекса z-й колонке (k может быть iterable/slice, z - iterable)  
  * [] - переопределить getitem, сделать его алиасом вашей loc-функции  
 Также нужно сделать статический метод, читающий CSV:   
-`your_package.read_csv(file_path, **csv_opt)`   
+`your_package.read_csv(file_path, **csv_opts)`   
 и возвращающий инстанс вашего датафрейма с прочитанными данными.    
 Метод должен принимать параметры, настраивающие поведение чтения CSV-файла.  
 
